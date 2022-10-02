@@ -16,6 +16,7 @@ const HOST = process.env.HOST || "localhost";
 
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("static"));
 app.use(cookieParser());
 app.use(cors());
 

@@ -5,6 +5,7 @@ const db = require("../db/sequelize");
 const mailService = require("./mail.service");
 const tokenService = require("./token.service");
 const ApiError = require("../utils/ApiError");
+const userData = require("../utils/userDto");
 
 const User = db.sequelize.models.user;
 
@@ -39,13 +40,7 @@ const registration = async (
 
   await mailService.sendActivationMail(email);
 
-  return {
-    id: user.id,
-    email: user.email,
-    login: user.login,
-    full_name: user.full_name,
-    role: user.role,
-  };
+  return userData(user);
 };
 
 const activate = async (token) => {
@@ -72,18 +67,16 @@ const login = async (email, password) => {
   if (!user.is_Activated) {
     throw ApiError.BadRequestError(`User is not confirmed email`);
   }
-  const tokens = tokenService.generateTokens({
-    id: user.id,
-    email: user.email,
-    role: user.role,
-  });
-  await tokenService.saveToken(user.id, tokens.refreshToken);
+  const tokens = tokenService.generateTokens(userData(user));
+  await tokenService.saveToken(
+    user.id,
+    tokens.accessToken,
+    tokens.refreshToken
+  );
 
   return {
     ...tokens,
-    id: user.id,
-    email: user.email,
-    role: user.role,
+    ...userData(user),
   };
 };
 
@@ -91,28 +84,18 @@ const refreshToken = async (refreshToken) => {
   if (!refreshToken) {
     throw ApiError.UnauthorizedError();
   }
-  const userData = tokenService.validateRefreshToken(refreshToken);
+  const userInfo = tokenService.validateRefreshToken(refreshToken);
   const tokenFromDB = await tokenService.findToken(refreshToken);
-  if (!userData || !tokenFromDB) {
+  if (!userInfo || !tokenFromDB) {
     throw ApiError.UnauthorizedError();
   }
-  const user = await User.findOne({ where: { id: userData.id } });
-  const tokens = tokenService.generateTokens({
-    id: user.id,
-    email: user.email,
-    login: user.login,
-    full_name: user.full_name,
-    role: user.role,
-  });
+  const user = await User.findOne({ where: { id: userInfo.id } });
+  const tokens = tokenService.generateTokens(userData(user));
   await tokenService.saveToken(user.id, tokens.refreshToken);
 
   return {
     ...tokens,
-    id: user.id,
-    email: user.email,
-    login: user.login,
-    full_name: user.full_name,
-    role: user.role,
+    ...userData(user),
   };
 };
 
@@ -127,8 +110,8 @@ const passwordReset = async (email) => {
 };
 
 const passwordConfirm = async (token, password, repeatedPassword) => {
-  const userData = tokenService.validateAccessToken(token);
-  const user = await User.findOne({ where: { email: userData.email } });
+  const userInfo = tokenService.validateAccessToken(token);
+  const user = await User.findOne({ where: { email: userInfo.email } });
   if (!user) {
     throw ApiError.BadRequest("No user found");
   }

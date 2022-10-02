@@ -28,8 +28,8 @@ module.exports = (sequelize) => {
         unique: true,
       },
       profile_picture: {
-        type: DataTypes.STRING, //TODO: AVATAR HERE
-        defaultValue: "",
+        type: DataTypes.STRING,
+        defaultValue: "default.png",
       },
       rating: {
         type: DataTypes.INTEGER.UNSIGNED,

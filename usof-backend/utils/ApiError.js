@@ -12,4 +12,12 @@ module.exports = class ApiError extends Error {
   static BadRequestError(message, errors = []) {
     return new ApiError(400, message, errors);
   }
+
+  static ForbiddenError(message = "Only admins can do this", errors = []) {
+    return new ApiError(403, message, errors);
+  }
+
+  static NothingFoundError(message = "Nothing Found", errors = []) {
+    return new ApiError(404, message, errors);
+  }
 };

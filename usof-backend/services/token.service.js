@@ -16,16 +16,17 @@ const generateTokens = (payload) => {
   };
 };
 
-const saveToken = async (userId, refreshToken) => {
+const saveToken = async (userId, accessToken, refreshToken) => {
   const tokenData = await Token.findOne({
     where: { userId: userId },
     include: "user",
   });
   if (tokenData) {
     tokenData.refreshToken = refreshToken;
+    tokenData.accessToken = accessToken;
     return tokenData.save();
   }
-  const token = await Token.create({ userId, refreshToken });
+  const token = await Token.create({ userId, accessToken, refreshToken });
   return token;
 };
 

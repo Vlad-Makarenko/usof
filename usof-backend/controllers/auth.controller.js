@@ -17,11 +17,7 @@ const registration = async (req, res, next) => {
       password,
       full_name
     );
-    res.cookie("refreshToken", userData.refreshToken, {
-      maxAge: 30 * 24 * 3600 * 1000,
-      httpOnly: true,
-    });
-    return res.status(201).json({ ...userData});
+    return res.status(201).json({ ...userData });
   } catch (err) {
     next(err);
   }
