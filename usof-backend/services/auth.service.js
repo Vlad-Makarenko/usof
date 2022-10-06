@@ -7,7 +7,7 @@ const tokenService = require("./token.service");
 const ApiError = require("../utils/ApiError");
 const userData = require("../utils/userDto");
 
-const User = db.sequelize.models.user;
+const User = db.sequelize.models.User;
 
 const registration = async (
   email,
@@ -53,8 +53,8 @@ const activate = async (token) => {
   await user.save();
 };
 
-const login = async (email, password) => {
-  const user = await User.findOne({ where: { email: email } });
+const login = async (login, email, password) => {
+  const user = await User.findOne({ where: { email, login } });
   if (!user) {
     throw ApiError.BadRequestError(
       `User with email ${email} is not registered`

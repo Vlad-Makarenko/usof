@@ -5,24 +5,64 @@ const ApiError = require("../utils/ApiError");
 const userData = require("../utils/userDto");
 const mailService = require("./mail.service");
 
-const User = db.sequelize.models.user;
+const User = db.sequelize.models.User;
 
+/**
+ *
+ * @returns User
+ */
 const getAllUsers = async () => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    attributes: [
+      "id",
+      "login",
+      "full_name",
+      "profile_picture",
+      "rating",
+      "role",
+      "createdAt",
+    ],
+  });
   if (!users) {
     throw ApiError.NothingFoundError();
   }
   return users;
 };
 
+/**
+ *
+ * @param {Number} id
+ * @returns User
+ */
 const getUser = async (id) => {
-  const user = await User.findOne({ where: { id: id } });
+  const user = await User.findOne({
+    where: { id: id },
+    attributes: [
+      "id",
+      "login",
+      "full_name",
+      "profile_picture",
+      "rating",
+      "role",
+      "createdAt",
+    ],
+  });
   if (!user) {
     throw ApiError.NothingFoundError();
   }
   return user;
 };
 
+/**
+ *
+ * @param {String} email
+ * @param {String} login
+ * @param {String} password
+ * @param {String} confirmedPassword
+ * @param {String} full_name
+ * @param {String} role
+ * @returns userData(User)
+ */
 const RegistrationByAdmin = async (
   email,
   login,
@@ -61,6 +101,12 @@ const RegistrationByAdmin = async (
   return userData(user);
 };
 
+/**
+ *
+ * @param {String} fileName
+ * @param {Number} userId
+ * @returns userData(User)
+ */
 const updateAvatar = async (fileName, userId) => {
   const user = await User.findOne({ where: { id: userId } });
   if (!user) {
@@ -74,6 +120,11 @@ const updateAvatar = async (fileName, userId) => {
   return userData(user);
 };
 
+/**
+ *
+ * @param {Number} userId
+ * @returns userData(User)
+ */
 const deleteAvatar = async (userId) => {
   const user = await User.findOne({ where: { id: userId } });
   if (!user) {
@@ -88,6 +139,13 @@ const deleteAvatar = async (userId) => {
   return userData(user);
 };
 
+/**
+ *
+ * @param {Boolean} owner
+ * @param {Object} data
+ * @param {Number} id
+ * @returns User
+ */
 const updateUser = async (owner, data, id) => {
   if (data.email) {
     const candidate = await User.findOne({ where: { email: data.email } });
@@ -118,6 +176,10 @@ const updateUser = async (owner, data, id) => {
   return user;
 };
 
+/**
+ *
+ * @param {Number} id
+ */
 const deleteUser = async (id) => {
   await User.destroy({ where: { id: id } });
 };

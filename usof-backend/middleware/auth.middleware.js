@@ -1,7 +1,7 @@
 const ApiError = require("../utils/ApiError");
 const tokenService = require("../services/token.service");
 const db = require("../db/sequelize");
-const User = db.sequelize.models.user;
+const User = db.sequelize.models.User;
 
 module.exports = async (req, res, next) => {
   try {
@@ -15,9 +15,9 @@ module.exports = async (req, res, next) => {
     }
     const candidate = await User.findOne({
       where: { id: decoded.id },
-      include: "token",
+      include: "Token",
     });
-    if (candidate.token.accessToken !== token) {
+    if (candidate.Token.accessToken !== token) {
       return next(ApiError.UnauthorizedError());
     }
 

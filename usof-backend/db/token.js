@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   return sequelize.define(
-    "token",
+    "Token",
     {
       accessToken: {
         type: DataTypes.STRING(333),
@@ -12,11 +12,12 @@ module.exports = (sequelize) => {
       refreshToken: {
         type: DataTypes.STRING(333),
         allowNull: false,
-        unique: true,
+        unique: true
       },
     },
     {
       timestamps: false,
+      freezeTableName: true,
     }
   );
 };

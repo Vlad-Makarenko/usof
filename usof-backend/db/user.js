@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   return sequelize.define(
-    "user",
+    "User",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -45,7 +45,8 @@ module.exports = (sequelize) => {
       },
     },
     {
-      timestamps: false,
+      updatedAt: false,
+      freezeTableName: true,
     }
   );
 };

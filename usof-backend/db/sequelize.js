@@ -1,6 +1,8 @@
 const { Sequelize } = require("sequelize");
-const initUser = require("./user");
-const initToken = require("./token.js");
+const initUser = require("./User");
+const initToken = require("./Token");
+const initPost = require("./Post");
+const initCategory = require("./Category");
 require("dotenv").config();
 
 const sequelize = new Sequelize(
@@ -10,13 +12,23 @@ const sequelize = new Sequelize(
   {
     dialect: process.env.DB_DIALECT,
     host: process.env.DB_HOST,
+    // logging: false,
   }
 );
 
 const User = initUser(sequelize);
 const Token = initToken(sequelize);
+const Post = initPost(sequelize);
+const Category = initCategory(sequelize);
 
-User.hasOne(Token);
+User.hasOne(Token); 
+User.hasMany(Post);
+
 Token.belongsTo(User);
+
+Post.belongsToMany(Category, { through: "PostCategory", as: "categories" });
+Post.belongsTo(User, { as: "author", foreignKey: "UserId" });
+
+Category.belongsToMany(Post, { through: "PostCategory", as: "posts" });
 
 module.exports = { sequelize };

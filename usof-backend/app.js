@@ -4,6 +4,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/auth.routes");
 const usersRouter = require("./routes/users.routes");
+const postsRouter = require("./routes/posts.routes");
 const errorMiddleware = require("./middleware/apiError.middlware");
 
 require("dotenv").config({ path: "./.env" });
@@ -22,6 +23,7 @@ app.use(cors());
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/posts", postsRouter);
 
 app.use(errorMiddleware);
 

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const db = require("../db/sequelize.js");
 
-const Token = db.sequelize.models.token;
+const Token = db.sequelize.models.Token;
 
 const generateTokens = (payload) => {
   const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
@@ -16,17 +16,14 @@ const generateTokens = (payload) => {
   };
 };
 
-const saveToken = async (userId, accessToken, refreshToken) => {
-  const tokenData = await Token.findOne({
-    where: { userId: userId },
-    include: "user",
-  });
+const saveToken = async (UserId, accessToken, refreshToken) => {
+  const tokenData = await Token.findOne({ where: { UserId } });
   if (tokenData) {
     tokenData.refreshToken = refreshToken;
     tokenData.accessToken = accessToken;
     return tokenData.save();
   }
-  const token = await Token.create({ userId, accessToken, refreshToken });
+  const token = await Token.create({ UserId, accessToken, refreshToken });
   return token;
 };
 
