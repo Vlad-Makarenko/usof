@@ -3,7 +3,7 @@ const { body } = require("express-validator");
 const authMdw = require("../middleware/auth.middleware");
 const adminMdw = require("../middleware/admin.middleware");
 const fileMdw = require("../middleware/file.middleware");
-const usersController = require("../controllers/users.controller");
+const usersController = require("../controllers/user.controller");
 
 const router = new Router();
 

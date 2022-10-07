@@ -81,17 +81,21 @@ const createPost = async (UserId, title, content, categories = []) => {
  * @param {String} role
  * @param {Number} page
  * @param {String} category
+ * @param {Boolean} force
  * @returns
  */
-const getAllPosts = async (role, page = 1, category = "") => {
-  const isExist = await Category.findOne({ where: { title: category } })
+const getAllPosts = async (role, page = 1, category, force) => {
+  const isExist = await Category.findOne({ where: { id: category } })
     .then((category) => category !== null)
     .then((isExist) => isExist);
+  if (!isExist && force) {
+    throw ApiError.NothingFoundError();
+  }
   const offset = (page - 1) * limit;
   const allPosts = await Post.findAndCountAll({
     where: {
       ...(role === "public" || role === "user" ? { status: "active" } : {}),
-      ...(category && isExist ? { "$categories.title$": category } : {}),
+      ...(category && isExist ? { "$categories.id$": category } : {}),
     },
     include: [
       {

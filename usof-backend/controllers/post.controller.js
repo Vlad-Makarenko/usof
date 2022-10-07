@@ -68,12 +68,8 @@ const updatePost = async (req, res, next) => {
 const deletePost = async (req, res, next) => {
   try {
     const postId = req.params.post_id;
-    await postService.deletePost(
-      req.user.role,
-      postId,
-      req.user.id
-    );
-    res.status(204);
+    await postService.deletePost(req.user.role, postId, req.user.id);
+    res.status(204).json({ message: "Post deleted successfully" });
   } catch (err) {
     next(err);
   }

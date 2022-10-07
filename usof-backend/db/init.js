@@ -57,5 +57,5 @@ module.exports = async () => {
   });
   await conn.promise().query(`CREATE DATABASE IF NOT EXISTS ${DB_NAME};`);
   await db.sequelize.sync();
-  await bootStrapAll();
+  // await bootStrapAll();
 };
