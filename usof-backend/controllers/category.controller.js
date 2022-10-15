@@ -67,12 +67,15 @@ const deleteCategory = async (req, res, next) => {
 
 const getPostsByCategory = async (req, res, next) => {
   try {
-    const { page } = req.query;
+    const { page, sort, date } = req.query;
     const categoryId = req.params.category_id;
     const posts = await postService.getAllPosts(
+      req.user.id,
       req.user.role,
       page,
       categoryId,
+      sort,
+      date,
       true
     );
     res.status(200).json(posts);

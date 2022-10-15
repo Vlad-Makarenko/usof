@@ -13,9 +13,13 @@ const registration = async (
   email,
   login,
   password,
+  repeatedPassword,
   full_name = "",
   role = "user"
 ) => {
+  if (password !== repeatedPassword) {
+    throw ApiError.BadRequestError("Passwords don't match");
+  }
   const emailCandidate = await User.findOne({ where: { email: email } });
   if (emailCandidate) {
     throw ApiError.BadRequestError(

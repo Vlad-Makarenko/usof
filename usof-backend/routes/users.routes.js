@@ -11,9 +11,9 @@ router.get("/", usersController.allUsers);
 router.get("/:user_id", usersController.userById);
 router.post(
   "/",
-  body("email").isEmail(),
+  body("email").trim().isEmail(),
   body("password").isLength({ min: 6, max: 32 }),
-  body("login").isLength({ min: 3, max: 30 }),
+  body("login").trim().isLength({ min: 3, max: 30 }),
   authMdw,
   adminMdw,
   usersController.adminRegistration

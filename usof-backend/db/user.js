@@ -32,7 +32,7 @@ module.exports = (sequelize) => {
         defaultValue: "default.png",
       },
       rating: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         defaultValue: 0,
       },
       role: {

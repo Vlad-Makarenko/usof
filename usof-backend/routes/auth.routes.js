@@ -6,9 +6,9 @@ const router = new Router();
 
 router.post(
   "/register",
-  body("email").isEmail(),
+  body("email").trim().isEmail(),
   body("password").isLength({ min: 6, max: 32 }),
-  body("login").isLength({ min: 3, max: 30 }),
+  body("login").trim().isLength({ min: 3, max: 30 }),
   authController.registration
 );
 router.post("/login", authController.login);

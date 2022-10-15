@@ -10,11 +10,12 @@ const registration = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequestError("validation error", errors.array()));
     }
-    const { email, login, password, full_name } = req.body;
+    const { email, login, password, repeatedPassword, full_name } = req.body;
     const userData = await authService.registration(
       email,
       login,
       password,
+      repeatedPassword,
       full_name
     );
     return res.status(201).json({ ...userData });

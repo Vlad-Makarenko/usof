@@ -16,14 +16,14 @@ router.get(
 );
 router.post(
   "/",
-  body("title").isLength({ min: 1, max: 256 }),
+  body("title").trim().isLength({ min: 1, max: 256 }),
   authMdw,
   adminMdw,
   categoryController.createCategory
 );
 router.patch(
   "/:category_id",
-  body("title").isLength({ min: 1, max: 256 }),
+  body("title").trim().isLength({ min: 1, max: 256 }),
   authMdw,
   adminMdw,
   categoryController.updateCategory

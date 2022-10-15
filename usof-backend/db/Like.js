@@ -2,22 +2,17 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   return sequelize.define(
-    "Category",
+    "Like",
     {
-      title: {
-        type: DataTypes.STRING,
+      type: {
+        type: DataTypes.ENUM("like", "dislike"),
         allowNull: false,
-        unique: true,
-      },
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        defaultValue: "There is no description here",
       },
     },
     {
       timestamps: false,
       freezeTableName: true,
+      updatedAt: false,
     }
   );
 };

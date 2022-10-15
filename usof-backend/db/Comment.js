@@ -2,21 +2,18 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   return sequelize.define(
-    "Category",
+    "Comment",
     {
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      description: {
+      content: {
         type: DataTypes.TEXT,
         allowNull: false,
-        defaultValue: "There is no description here",
+      },
+      status: {
+        type: DataTypes.ENUM("active", "inactive"),
+        defaultValue: "active",
       },
     },
     {
-      timestamps: false,
       freezeTableName: true,
     }
   );
