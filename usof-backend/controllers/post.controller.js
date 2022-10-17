@@ -25,7 +25,7 @@ const createPost = async (req, res, next) => {
 
 const getAllPosts = async (req, res, next) => {
   try {
-    const { page, categories, sort, date } = req.query;
+    const { page, categories, sort, date, user } = req.query;
     const posts = await postService.getAllPosts(
       req.user.id,
       req.user.role,
@@ -33,6 +33,7 @@ const getAllPosts = async (req, res, next) => {
       categories,
       sort,
       date,
+      user
     );
 
     res.status(200).json(posts);

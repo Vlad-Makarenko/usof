@@ -16,5 +16,6 @@ router.post('/logout', authController.logout);
 router.post('/password-reset', authController.passwordReset);
 router.post('/password-reset/:confirm_token', authController.passwordConfirm);
 router.get('/activate/:confirm_token', authController.activation);
+router.get('/refresh', authController.refreshToken);
 
 module.exports = router;

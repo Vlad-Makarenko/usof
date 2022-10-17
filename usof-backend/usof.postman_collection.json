@@ -222,6 +222,31 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "refreshToken",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/auth/refresh",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -488,7 +513,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{url}}/api/posts/?page=1&date=1665738000000&categories=1,2,3&sort=createdAt",
+							"raw": "{{url}}/api/posts/?page=1&date=1665738000000&categories=1,2,3&sort=createdAt,desc&user=1",
 							"host": [
 								"{{url}}"
 							],
@@ -512,7 +537,11 @@
 								},
 								{
 									"key": "sort",
-									"value": "createdAt"
+									"value": "createdAt,desc"
+								},
+								{
+									"key": "user",
+									"value": "1"
 								}
 							]
 						}

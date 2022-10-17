@@ -95,7 +95,7 @@ const refreshToken = async (refreshToken) => {
   }
   const user = await User.findOne({ where: { id: userInfo.id } });
   const tokens = tokenService.generateTokens(userData(user));
-  await tokenService.saveToken(user.id, tokens.refreshToken);
+  await tokenService.saveToken(user.id, tokens.accessToken, tokens.refreshToken);
 
   return {
     ...tokens,

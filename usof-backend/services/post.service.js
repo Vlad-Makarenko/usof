@@ -65,8 +65,9 @@ const getAllPosts = async (
   role,
   page = 1,
   categoriesStr,
-  sort = 'likeCount',
+  sort = 'likeCount,desc',
   dateInterval,
+  byUser,
   force,
 ) => {
   let categories;
@@ -82,27 +83,30 @@ const getAllPosts = async (
     }
   }
   const offset = (page - 1) * limit;
+  const oreder = sort.split(',')[0];
+  const direction = sort.split(',')[1] || 'DESC';
   const allPosts = await Post.findAndCountAll({
     where: {
       ...(role === 'public'
         ? { status: 'active' }
         : {
-          [sequelize.Op.or]: [
-            { status: 'active' },
-            {
-              status: 'inactive',
-              ...(role === 'user' ? { UserId: userId } : {}),
-            },
-          ],
-        }),
+            [sequelize.Op.or]: [
+              { status: 'active' },
+              {
+                status: 'inactive',
+                ...(role === 'user' ? { UserId: userId } : {}),
+              },
+            ],
+          }),
       ...(dateInterval
         ? {
-          createdAt: {
-            [sequelize.Op.lt]: new Date(),
-            [sequelize.Op.gt]: new Date(Number(dateInterval)),
-          },
-        }
+            createdAt: {
+              [sequelize.Op.lt]: new Date(),
+              [sequelize.Op.gt]: new Date(Number(dateInterval)),
+            },
+          }
         : {}),
+      ...(byUser ? { UserId: byUser } : {}),
     },
     attributes: [
       'id',
@@ -142,7 +146,7 @@ const getAllPosts = async (
     limit,
     subQuery: false,
     group: ['Post.id'],
-    order: [[sort, 'DESC']],
+    order: [[oreder, direction]],
   });
   if (!allPosts) {
     throw ApiError.NothingFoundError();
@@ -163,14 +167,14 @@ const getPost = async (role, postId, userId) => {
       ...(role === 'public'
         ? { status: 'active' }
         : {
-          [sequelize.Op.or]: [
-            { status: 'active' },
-            {
-              status: 'inactive',
-              ...(role === 'user' ? { UserId: userId } : {}),
-            },
-          ],
-        }),
+            [sequelize.Op.or]: [
+              { status: 'active' },
+              {
+                status: 'inactive',
+                ...(role === 'user' ? { UserId: userId } : {}),
+              },
+            ],
+          }),
     },
     attributes: [
       'id',

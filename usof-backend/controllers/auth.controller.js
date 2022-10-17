@@ -89,7 +89,7 @@ const refreshToken = async (req, res, next) => {
       maxAge: 30 * 24 * 3600 * 1000,
       httpOnly: true,
     });
-    return res.json({ ...userData, refreshToken: undefined });
+     return res.status(200).json({ ...userData, refreshToken: undefined });
   } catch (err) {
     next(err);
   }
