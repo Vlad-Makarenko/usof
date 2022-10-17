@@ -1,6 +1,6 @@
-const userService = require("../services/user.service");
-const { validationResult } = require("express-validator");
-const ApiError = require("../utils/ApiError");
+const { validationResult } = require('express-validator');
+const userService = require('../services/user.service');
+const ApiError = require('../utils/ApiError');
 
 const allUsers = async (req, res, next) => {
   try {
@@ -25,7 +25,7 @@ const adminRegistration = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const { email, login, password, confirmedPassword, full_name, role } =
       req.body;
@@ -35,7 +35,7 @@ const adminRegistration = async (req, res, next) => {
       password,
       confirmedPassword,
       full_name,
-      role
+      role,
     );
     return res.status(201).json({ ...userData });
   } catch (err) {
@@ -65,11 +65,11 @@ const deleteAvatar = async (req, res, next) => {
 const userUpdate = async (req, res, next) => {
   try {
     const owner = req.user.id == req.params.user_id;
-    if (owner || req.user.role == "admin") {
+    if (owner || req.user.role === 'admin') {
       const user = await userService.updateUser(
         owner,
         req.body,
-        req.params.user_id
+        req.params.user_id,
       );
       res.json(user);
     } else {
@@ -84,7 +84,7 @@ const userDelete = async (req, res, next) => {
   try {
     const id = req.params.user_id;
     userService.deleteUser(id);
-    res.status(204).json({ message: "User deleted successfully" });
+    res.status(204).json({ message: 'User deleted successfully' });
   } catch (err) {
     next(err);
   }

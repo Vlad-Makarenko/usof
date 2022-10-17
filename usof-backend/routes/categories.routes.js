@@ -1,38 +1,38 @@
-const Router = require("express").Router;
-const categoryController = require("../controllers/category.controller");
-const authMdw = require("../middleware/auth.middleware");
-const adminMdw = require("../middleware/admin.middleware");
-const userMdw = require("../middleware/user.middleware");
-const { body } = require("express-validator");
+const { Router } = require('express');
+const { body } = require('express-validator');
+const categoryController = require('../controllers/category.controller');
+const authMdw = require('../middleware/auth.middleware');
+const adminMdw = require('../middleware/admin.middleware');
+const userMdw = require('../middleware/user.middleware');
 
 const router = new Router();
 
-router.get("/", categoryController.getAllCategories);
-router.get("/:category_id", categoryController.getCategory);
+router.get('/', categoryController.getAllCategories);
+router.get('/:category_id', categoryController.getCategory);
 router.get(
-  "/:category_id/posts",
+  '/:category_id/posts',
   userMdw,
-  categoryController.getPostsByCategory
+  categoryController.getPostsByCategory,
 );
 router.post(
-  "/",
-  body("title").trim().isLength({ min: 1, max: 256 }),
+  '/',
+  body('title').trim().isLength({ min: 1, max: 256 }),
   authMdw,
   adminMdw,
-  categoryController.createCategory
+  categoryController.createCategory,
 );
 router.patch(
-  "/:category_id",
-  body("title").trim().isLength({ min: 1, max: 256 }),
+  '/:category_id',
+  body('title').trim().isLength({ min: 1, max: 256 }),
   authMdw,
   adminMdw,
-  categoryController.updateCategory
+  categoryController.updateCategory,
 );
 router.delete(
-  "/:category_id",
+  '/:category_id',
   authMdw,
   adminMdw,
-  categoryController.deleteCategory
+  categoryController.deleteCategory,
 );
 
 module.exports = router;

@@ -1,11 +1,11 @@
-const fs = require("fs");
-const bcrypt = require("bcryptjs");
-const db = require("../db/sequelize");
-const ApiError = require("../utils/ApiError");
-const userData = require("../utils/userDto");
-const mailService = require("./mail.service");
+const fs = require('fs');
+const bcrypt = require('bcryptjs');
+const db = require('../db/sequelize');
+const ApiError = require('../utils/ApiError');
+const userData = require('../utils/userDto');
+const mailService = require('./mail.service');
 
-const User = db.sequelize.models.User;
+const { User } = db.sequelize.models;
 
 /**
  *
@@ -14,13 +14,13 @@ const User = db.sequelize.models.User;
 const getAllUsers = async () => {
   const users = await User.findAll({
     attributes: [
-      "id",
-      "login",
-      "full_name",
-      "profile_picture",
-      "rating",
-      "role",
-      "createdAt",
+      'id',
+      'login',
+      'full_name',
+      'profile_picture',
+      'rating',
+      'role',
+      'createdAt',
     ],
   });
   if (!users) {
@@ -36,15 +36,15 @@ const getAllUsers = async () => {
  */
 const getUser = async (id) => {
   const user = await User.findOne({
-    where: { id: id },
+    where: { id },
     attributes: [
-      "id",
-      "login",
-      "full_name",
-      "profile_picture",
-      "rating",
-      "role",
-      "createdAt",
+      'id',
+      'login',
+      'full_name',
+      'profile_picture',
+      'rating',
+      'role',
+      'createdAt',
     ],
   });
   if (!user) {
@@ -68,23 +68,23 @@ const RegistrationByAdmin = async (
   login,
   password,
   confirmedPassword,
-  full_name = "",
-  role = "user"
+  full_name = '',
+  role = 'user',
 ) => {
-  const emailCandidate = await User.findOne({ where: { email: email } });
+  const emailCandidate = await User.findOne({ where: { email } });
   if (emailCandidate) {
     throw ApiError.BadRequestError(
-      `User with email ${email} is already registered`
+      `User with email ${email} is already registered`,
     );
   }
-  const loginCandidate = await User.findOne({ where: { login: login } });
+  const loginCandidate = await User.findOne({ where: { login } });
   if (loginCandidate) {
     throw ApiError.BadRequestError(
-      `User with login ${login} is already registered`
+      `User with login ${login} is already registered`,
     );
   }
   if (password !== confirmedPassword) {
-    throw ApiError.BadRequestError("passwords do not match");
+    throw ApiError.BadRequestError('passwords do not match');
   }
 
   const hashPassword = await bcrypt.hash(password, 4);
@@ -110,9 +110,9 @@ const RegistrationByAdmin = async (
 const updateAvatar = async (fileName, userId) => {
   const user = await User.findOne({ where: { id: userId } });
   if (!user) {
-    throw ApiError.BadRequestError("No such user");
+    throw ApiError.BadRequestError('No such user');
   }
-  if (user.profile_picture !== "default.png") {
+  if (user.profile_picture !== 'default.png') {
     fs.unlinkSync(`./static/avatars/${user.profile_picture}`);
   }
   user.profile_picture = fileName;
@@ -128,13 +128,13 @@ const updateAvatar = async (fileName, userId) => {
 const deleteAvatar = async (userId) => {
   const user = await User.findOne({ where: { id: userId } });
   if (!user) {
-    throw ApiError.BadRequestError("No such user");
+    throw ApiError.BadRequestError('No such user');
   }
-  if (user.profile_picture === "default.png") {
-    throw ApiError.BadRequestError("You don`t have avatar");
+  if (user.profile_picture === 'default.png') {
+    throw ApiError.BadRequestError('You don`t have avatar');
   }
   fs.unlinkSync(`./static/avatars/${user.profile_picture}`);
-  user.profile_picture = "default.png";
+  user.profile_picture = 'default.png';
   await user.save();
   return userData(user);
 };
@@ -151,7 +151,7 @@ const updateUser = async (owner, data, id) => {
     const candidate = await User.findOne({ where: { email: data.email } });
     if (candidate) {
       throw ApiError.BadRequestError(
-        `User with email ${email} is already registered`
+        `User with email ${email} is already registered`,
       );
     }
   }
@@ -159,19 +159,18 @@ const updateUser = async (owner, data, id) => {
     const candidate = await User.findOne({ where: { login: data.login } });
     if (candidate) {
       throw ApiError.BadRequestError(
-        `User with login ${login} is already registered`
+        `User with login ${login} is already registered`,
       );
     }
   }
-  const user = await User.findOne({ where: { id: id } });
+  const user = await User.findOne({ where: { id } });
   if (data.email) {
     user.email = data.email;
     await mailService.sendActivationMail(data.email);
   }
   user.login = data.login ? data.login : user.login;
   user.full_name = data.full_name ? data.full_name : user.full_name;
-  user.profile_picture =
-    data.avatar && !owner ? "default.png" : user.profile_picture;
+  user.profile_picture = data.avatar && !owner ? 'default.png' : user.profile_picture;
   await user.save();
   return user;
 };
@@ -181,7 +180,7 @@ const updateUser = async (owner, data, id) => {
  * @param {Number} id
  */
 const deleteUser = async (id) => {
-  await User.destroy({ where: { id: id } });
+  await User.destroy({ where: { id } });
 };
 
 module.exports = {

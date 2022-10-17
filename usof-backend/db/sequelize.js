@@ -1,12 +1,12 @@
-const { Sequelize } = require("sequelize");
-const initUser = require("./User");
-const initToken = require("./Token");
-const initPost = require("./Post");
-const initCategory = require("./Category");
-const initComment = require("./Comment");
-const initLike = require("./Like");
+const { Sequelize } = require('sequelize');
+const initUser = require('./User');
+const initToken = require('./Token');
+const initPost = require('./Post');
+const initCategory = require('./Category');
+const initComment = require('./Comment');
+const initLike = require('./Like');
 
-require("dotenv").config();
+require('dotenv').config();
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -16,7 +16,7 @@ const sequelize = new Sequelize(
     dialect: process.env.DB_DIALECT,
     host: process.env.DB_HOST,
     // logging: false,
-  }
+  },
 );
 
 const User = initUser(sequelize);
@@ -33,19 +33,19 @@ User.hasMany(Like);
 
 Token.belongsTo(User);
 
-Post.belongsToMany(Category, { through: "PostCategory", as: "categories" });
-Post.belongsTo(User, { as: "author", foreignKey: "UserId" });
+Post.belongsToMany(Category, { through: 'PostCategory', as: 'categories' });
+Post.belongsTo(User, { as: 'author', foreignKey: 'UserId' });
 Post.hasMany(Comment);
 Post.hasMany(Like);
 
-Category.belongsToMany(Post, { through: "PostCategory", as: "posts" });
+Category.belongsToMany(Post, { through: 'PostCategory', as: 'posts' });
 
-Comment.belongsTo(User, { as: "author", foreignKey: "UserId" });
+Comment.belongsTo(User, { as: 'author', foreignKey: 'UserId' });
 Comment.belongsTo(Post);
 Comment.hasMany(Like);
 
 Like.belongsTo(Post);
 Like.belongsTo(Comment);
-Like.belongsTo(User, { as: "author", foreignKey: "UserId" });
+Like.belongsTo(User, { as: 'author', foreignKey: 'UserId' });
 
 module.exports = { sequelize };

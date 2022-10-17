@@ -1,13 +1,13 @@
-const categoryService = require("../services/category.service");
-const postService = require("../services/post.service");
-const { validationResult } = require("express-validator");
-const ApiError = require("../utils/ApiError");
+const { validationResult } = require('express-validator');
+const categoryService = require('../services/category.service');
+const postService = require('../services/post.service');
+const ApiError = require('../utils/ApiError');
 
 const createCategory = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const { title, description } = req.body;
     const category = await categoryService.createCategory(title, description);
@@ -40,14 +40,14 @@ const updateCategory = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const categoryId = req.params.category_id;
     const { title, description } = req.body;
     const category = await categoryService.updateCategory(
       categoryId,
       title,
-      description
+      description,
     );
     res.status(201).json(category);
   } catch (err) {
@@ -59,7 +59,7 @@ const deleteCategory = async (req, res, next) => {
   try {
     const categoryId = req.params.category_id;
     await categoryService.deleteCategory(categoryId);
-    res.status(204).json({ message: "Category deleted successfully" });
+    res.status(204).json({ message: 'Category deleted successfully' });
   } catch (err) {
     next(err);
   }
@@ -76,7 +76,7 @@ const getPostsByCategory = async (req, res, next) => {
       categoryId,
       sort,
       date,
-      true
+      true,
     );
     res.status(200).json(posts);
   } catch (err) {

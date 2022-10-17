@@ -1,11 +1,12 @@
-const ApiError = require("../utils/ApiError");
-const tokenService = require("../services/token.service");
-const db = require("../db/sequelize");
-const User = db.sequelize.models.User;
+const ApiError = require('../utils/ApiError');
+const tokenService = require('../services/token.service');
+const db = require('../db/sequelize');
+
+const { User } = db.sequelize.models;
 
 module.exports = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization.split(' ')[1];
     if (!token) {
       return next(ApiError.UnauthorizedError());
     }
@@ -15,7 +16,7 @@ module.exports = async (req, res, next) => {
     }
     const candidate = await User.findOne({
       where: { id: decoded.id },
-      include: "Token",
+      include: 'Token',
     });
     if (candidate.Token.accessToken !== token) {
       return next(ApiError.UnauthorizedError());

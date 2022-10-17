@@ -1,10 +1,7 @@
-const db = require("../db/sequelize");
-const ApiError = require("../utils/ApiError");
+const db = require('../db/sequelize');
+const ApiError = require('../utils/ApiError');
 
-const User = db.sequelize.models.User;
-const Post = db.sequelize.models.Post;
-const Category = db.sequelize.models.Category;
-const PostCategory = db.sequelize.models.PostCategory;
+const { Category } = db.sequelize.models;
 
 const getAllCategories = async () => {
   const categories = await Category.findAll();
@@ -25,7 +22,7 @@ const getCategory = async (id) => {
 const createCategory = async (title, description) => {
   const category = await Category.create({ title, description });
   if (!category) {
-    throw ApiError.BadRequestError("Wrong request");
+    throw ApiError.BadRequestError('Wrong request');
   }
   return category;
 };
@@ -33,7 +30,7 @@ const createCategory = async (title, description) => {
 const updateCategory = async (categoryId, title, description) => {
   const category = await Category.findByPk(categoryId);
   if (!category) {
-    throw ApiError.BadRequestError("Wrong category");
+    throw ApiError.BadRequestError('Wrong category');
   }
   category.title = title || category.title;
   category.description = description || category.description;

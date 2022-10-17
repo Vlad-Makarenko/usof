@@ -1,21 +1,21 @@
-const postService = require("../services/post.service");
-const commentService = require("../services/comment.service");
-const likeService = require("../services/like.service");
-const { validationResult } = require("express-validator");
-const ApiError = require("../utils/ApiError");
+const { validationResult } = require('express-validator');
+const postService = require('../services/post.service');
+const commentService = require('../services/comment.service');
+const likeService = require('../services/like.service');
+const ApiError = require('../utils/ApiError');
 
 const createPost = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const { title, content, categories } = req.body;
     const post = await postService.createPost(
       req.user.id,
       title,
       content,
-      categories
+      categories,
     );
     res.status(201).json(post);
   } catch (err) {
@@ -32,7 +32,7 @@ const getAllPosts = async (req, res, next) => {
       page,
       categories,
       sort,
-      date
+      date,
     );
 
     res.status(200).json(posts);
@@ -55,7 +55,7 @@ const updatePost = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const postId = req.params.post_id;
     const { title, content, categories, status } = req.body;
@@ -66,7 +66,7 @@ const updatePost = async (req, res, next) => {
       title,
       status,
       content,
-      categories
+      categories,
     );
     res.status(201).json(post);
   } catch (err) {
@@ -78,7 +78,7 @@ const deletePost = async (req, res, next) => {
   try {
     const postId = req.params.post_id;
     await postService.deletePost(req.user.role, postId, req.user.id);
-    res.status(204).json({ message: "Post deleted successfully" });
+    res.status(204).json({ message: 'Post deleted successfully' });
   } catch (err) {
     next(err);
   }
@@ -98,14 +98,14 @@ const createPostComment = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const postId = req.params.post_id;
     const { content } = req.body;
     const comment = await commentService.createComment(
       postId,
       req.user.id,
-      content
+      content,
     );
     res.status(201).json(comment);
   } catch (err) {
@@ -119,7 +119,7 @@ const getPostComments = async (req, res, next) => {
     const comments = await commentService.getPostComments(
       postId,
       req.user.role,
-      req.user.id
+      req.user.id,
     );
     res.status(200).json(comments);
   } catch (err) {
@@ -131,7 +131,7 @@ const createPostLike = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const postId = req.params.post_id;
     const { type } = req.body;
@@ -157,7 +157,7 @@ const deletePostLike = async (req, res, next) => {
   try {
     const postId = req.params.post_id;
     await likeService.deletePostLike(req.user.id, postId);
-    res.status(204).json({ message: "Like deleted successfully" });
+    res.status(204).json({ message: 'Like deleted successfully' });
   } catch (err) {
     next(err);
   }

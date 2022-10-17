@@ -1,7 +1,7 @@
-const commentService = require("../services/comment.service");
-const likeService = require("../services/like.service");
-const { validationResult } = require("express-validator");
-const ApiError = require("../utils/ApiError");
+const { validationResult } = require('express-validator');
+const commentService = require('../services/comment.service');
+const likeService = require('../services/like.service');
+const ApiError = require('../utils/ApiError');
 
 const getComment = async (req, res, next) => {
   try {
@@ -9,7 +9,7 @@ const getComment = async (req, res, next) => {
     const comment = await commentService.getComment(
       req.user.role,
       commentId,
-      req.user.id
+      req.user.id,
     );
     res.status(200).json(comment);
   } catch (err) {
@@ -21,7 +21,7 @@ const updateComment = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const commentId = req.params.comment_id;
     const { content, status } = req.body;
@@ -30,7 +30,7 @@ const updateComment = async (req, res, next) => {
       commentId,
       req.user.id,
       status,
-      content
+      content,
     );
     res.status(201).json(comment);
   } catch (err) {
@@ -42,7 +42,7 @@ const deleteComment = async (req, res, next) => {
   try {
     const commentId = req.params.comment_id;
     await commentService.deleteComment(req.user.role, commentId, req.user.id);
-    res.status(204).json({ message: "Comment deleted successfully" });
+    res.status(204).json({ message: 'Comment deleted successfully' });
   } catch (err) {
     next(err);
   }
@@ -52,14 +52,14 @@ const createCommentLike = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequestError("validation error", errors.array()));
+      return next(ApiError.BadRequestError('validation error', errors.array()));
     }
     const commentId = req.params.comment_id;
     const { type } = req.body;
     const like = await likeService.createCommentLike(
       commentId,
       req.user.id,
-      type
+      type,
     );
     res.status(201).json(like);
   } catch (err) {
@@ -82,7 +82,7 @@ const deleteCommentLike = async (req, res, next) => {
   try {
     const commentId = req.params.comment_id;
     await likeService.deleteCommentLike(req.user.id, commentId);
-    res.status(204).json({ message: "Post deleted successfully" });
+    res.status(204).json({ message: 'Post deleted successfully' });
   } catch (err) {
     next(err);
   }

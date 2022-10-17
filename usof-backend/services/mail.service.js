@@ -1,5 +1,5 @@
-const nodemailer = require("nodemailer");
-const tokenService = require("./token.service");
+const nodemailer = require('nodemailer');
+const tokenService = require('./token.service');
 
 class MailService {
   constructor() {
@@ -16,12 +16,12 @@ class MailService {
 
   async sendActivationMail(to) {
     const { refreshToken } = tokenService.generateTokens({ email: to });
-    const link = process.env.API_URL + `/api/auth/activate/${refreshToken}`;
+    const link = `${process.env.API_URL}/api/auth/activate/${refreshToken}`;
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: "Account activation at " + process.env.API_URL,
-      text: "",
+      subject: `Account activation at ${process.env.API_URL}`,
+      text: '',
       html: `
                 <div>
                     <h1>For account activation click on the link!</h1>
@@ -33,13 +33,12 @@ class MailService {
 
   async sendPswResetMail(to) {
     const { accessToken } = tokenService.generateTokens({ email: to });
-    const link =
-      process.env.API_URL + `/api/auth/password-reset/${accessToken}`;
+    const link = `${process.env.API_URL}/api/auth/password-reset/${accessToken}`;
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: "Password reset for " + process.env.API_URL,
-      text: "",
+      subject: `Password reset for ${process.env.API_URL}`,
+      text: '',
       html: `
                 <div>
                     <h1>Follow the link to reset your password</h1>

@@ -1,6 +1,6 @@
-const ApiError = require("../utils/ApiError");
+const ApiError = require('../utils/ApiError');
 
-module.exports = (err, req, res, next) => {
+module.exports = (err, req, res) => {
   console.error(err);
   if (err instanceof ApiError) {
     return res
@@ -9,5 +9,5 @@ module.exports = (err, req, res, next) => {
   }
   return res
     .status(500)
-    .json({ message: "Unexpected error", errors: err.errors });
+    .json({ message: 'Unexpected error', errors: err.errors });
 };

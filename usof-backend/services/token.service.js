@@ -1,14 +1,14 @@
-const jwt = require("jsonwebtoken");
-const db = require("../db/sequelize.js");
+const jwt = require('jsonwebtoken');
+const db = require('../db/sequelize');
 
-const Token = db.sequelize.models.Token;
+const { Token } = db.sequelize.models;
 
 const generateTokens = (payload) => {
   const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: "30m",
+    expiresIn: '30m',
   });
   const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: "30d",
+    expiresIn: '30d',
   });
   return {
     accessToken,
@@ -46,11 +46,11 @@ const validateRefreshToken = (token) => {
 };
 
 const removeToken = async (refreshToken) => {
-  await Token.destroy({ where: { refreshToken: refreshToken } });
+  await Token.destroy({ where: { refreshToken } });
 };
 
 const findToken = async (refreshToken) => {
-  const token = await Token.findOne({ where: { refreshToken: refreshToken } });
+  const token = await Token.findOne({ where: { refreshToken } });
   return token;
 };
 

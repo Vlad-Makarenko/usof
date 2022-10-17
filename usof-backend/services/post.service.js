@@ -1,18 +1,17 @@
-const db = require("../db/sequelize");
-const sequelize = require("sequelize");
-const ApiError = require("../utils/ApiError");
+const sequelize = require('sequelize');
+const db = require('../db/sequelize');
+const ApiError = require('../utils/ApiError');
 
-const User = db.sequelize.models.User;
-const Post = db.sequelize.models.Post;
-const Category = db.sequelize.models.Category;
-const PostCategory = db.sequelize.models.PostCategory;
-const Comment = db.sequelize.models.Comment;
+const { User } = db.sequelize.models;
+const { Post } = db.sequelize.models;
+const { Category } = db.sequelize.models;
+const { PostCategory } = db.sequelize.models;
 const limit = 10;
 
 const checkCategories = async (categories) => {
   for (const category of categories) {
     const isExist = await Category.findOne({ where: { title: category } }).then(
-      (category) => category !== null
+      (category) => category !== null,
     );
     if (!isExist) {
       throw ApiError.BadRequestError(`Wrong category`);
@@ -46,17 +45,17 @@ const createPost = async (UserId, title, content, categories = []) => {
         through: {
           attributes: [],
         },
-        as: "categories",
+        as: 'categories',
       },
       {
         model: User,
-        as: "author",
-        attributes: ["login", "full_name", "profile_picture", "rating"],
+        as: 'author',
+        attributes: ['login', 'full_name', 'profile_picture', 'rating'],
       },
     ],
   });
   if (!resultPost) {
-    throw ApiError.BadRequestError("Wrong request");
+    throw ApiError.BadRequestError('Wrong request');
   }
   return resultPost;
 };
@@ -66,16 +65,16 @@ const getAllPosts = async (
   role,
   page = 1,
   categoriesStr,
-  sort = "likeCount",
+  sort = 'likeCount',
   dateInterval,
-  force
+  force,
 ) => {
   let categories;
   if (categoriesStr || force) {
-    categories = categoriesStr.split(",");
+    categories = categoriesStr.split(',');
     for (const category of categories) {
       const isExist = await Category.findOne({ where: { id: category } }).then(
-        (category) => category !== null
+        (category) => category !== null,
       );
       if (!isExist) {
         throw ApiError.BadRequestError(`Wrong category`);
@@ -85,31 +84,31 @@ const getAllPosts = async (
   const offset = (page - 1) * limit;
   const allPosts = await Post.findAndCountAll({
     where: {
-      ...(role === "public"
-        ? { status: "active" }
+      ...(role === 'public'
+        ? { status: 'active' }
         : {
-            [sequelize.Op.or]: [
-              { status: "active" },
-              {
-                status: "inactive",
-                ...(role === "user" ? { UserId: userId } : {}),
-              },
-            ],
-          }),
+          [sequelize.Op.or]: [
+            { status: 'active' },
+            {
+              status: 'inactive',
+              ...(role === 'user' ? { UserId: userId } : {}),
+            },
+          ],
+        }),
       ...(dateInterval
         ? {
-            createdAt: {
-              [sequelize.Op.lt]: new Date(),
-              [sequelize.Op.gt]: new Date(Number(dateInterval)),
-            },
-          }
+          createdAt: {
+            [sequelize.Op.lt]: new Date(),
+            [sequelize.Op.gt]: new Date(Number(dateInterval)),
+          },
+        }
         : {}),
     },
     attributes: [
-      "id",
-      "title",
-      "content",
-      "createdAt",
+      'id',
+      'title',
+      'content',
+      'createdAt',
       [
         sequelize.literal(`(
 					SELECT COUNT(like.id)
@@ -117,7 +116,7 @@ const getAllPosts = async (
 					WHERE like.PostId = post.id
           AND like.type = 'like'
 				)`),
-        "likeCount",
+        'likeCount',
       ],
     ],
     include: [
@@ -131,19 +130,19 @@ const getAllPosts = async (
             ? { id: { [sequelize.Op.in]: categories } }
             : {}),
         },
-        as: "categories",
+        as: 'categories',
       },
       {
         model: User,
-        as: "author",
-        attributes: ["login", "full_name", "profile_picture", "rating"],
+        as: 'author',
+        attributes: ['login', 'full_name', 'profile_picture', 'rating'],
       },
     ],
     offset,
     limit,
     subQuery: false,
-    group: ["Post.id"],
-    order: [[sort, "DESC"]],
+    group: ['Post.id'],
+    order: [[sort, 'DESC']],
   });
   if (!allPosts) {
     throw ApiError.NothingFoundError();
@@ -161,24 +160,24 @@ const getPost = async (role, postId, userId) => {
   const post = await Post.findOne({
     where: {
       id: postId,
-      ...(role === "public"
-        ? { status: "active" }
+      ...(role === 'public'
+        ? { status: 'active' }
         : {
-            [sequelize.Op.or]: [
-              { status: "active" },
-              {
-                status: "inactive",
-                ...(role === "user" ? { UserId: userId } : {}),
-              },
-            ],
-          }),
+          [sequelize.Op.or]: [
+            { status: 'active' },
+            {
+              status: 'inactive',
+              ...(role === 'user' ? { UserId: userId } : {}),
+            },
+          ],
+        }),
     },
     attributes: [
-      "id",
-      "title",
-      "content",
-      "createdAt",
-      "updatedAt",
+      'id',
+      'title',
+      'content',
+      'createdAt',
+      'updatedAt',
       [
         sequelize.literal(`(
 					SELECT COUNT(like.id)
@@ -186,7 +185,7 @@ const getPost = async (role, postId, userId) => {
 					WHERE like.PostId = post.id
           AND like.type = 'like'
 				)`),
-        "likeCount",
+        'likeCount',
       ],
     ],
     include: [
@@ -195,12 +194,12 @@ const getPost = async (role, postId, userId) => {
         through: {
           attributes: [],
         },
-        as: "categories",
+        as: 'categories',
       },
       {
         model: User,
-        as: "author",
-        attributes: ["login", "full_name", "profile_picture", "rating"],
+        as: 'author',
+        attributes: ['login', 'full_name', 'profile_picture', 'rating'],
       },
     ],
   });
@@ -217,17 +216,17 @@ const updatePost = async (
   role,
   postId,
   userId,
-  title = "",
-  status = "active",
-  content = "",
-  categories = []
+  title = '',
+  status = 'active',
+  content = '',
+  categories = [],
 ) => {
   const post = await Post.findOne({ where: { id: postId } });
   if (!post) {
-    throw ApiError.BadRequestError("Wrong request");
+    throw ApiError.BadRequestError('Wrong request');
   }
   const owner = userId === post.UserId;
-  if (owner || role === "admin") {
+  if (owner || role === 'admin') {
     await checkCategories(categories);
     await PostCategory.destroy({ where: { PostId: postId } });
     await configurePostCategory(categories, post.id);
@@ -238,7 +237,7 @@ const updatePost = async (
     }
     await post.save();
   } else {
-    throw ApiError.ForbiddenError("Only owner can do this");
+    throw ApiError.ForbiddenError('Only owner can do this');
   }
 
   return post;
@@ -247,13 +246,13 @@ const updatePost = async (
 const deletePost = async (role, postId, userId) => {
   const post = await Post.findOne({ where: { id: postId } });
   if (!post) {
-    throw ApiError.BadRequestError("Wrong request");
+    throw ApiError.BadRequestError('Wrong request');
   }
   const owner = userId === post.UserId;
-  if (owner || role === "admin") {
+  if (owner || role === 'admin') {
     await post.destroy();
   } else {
-    throw ApiError.ForbiddenError("Only owner can do this");
+    throw ApiError.ForbiddenError('Only owner can do this');
   }
 };
 
@@ -268,7 +267,7 @@ const getPostCategories = async (postId) => {
         through: {
           attributes: [],
         },
-        as: "categories",
+        as: 'categories',
       },
     ],
   });

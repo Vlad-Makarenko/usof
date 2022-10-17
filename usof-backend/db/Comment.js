@@ -1,20 +1,18 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-module.exports = (sequelize) => {
-  return sequelize.define(
-    "Comment",
-    {
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      status: {
-        type: DataTypes.ENUM("active", "inactive"),
-        defaultValue: "active",
-      },
+module.exports = (sequelize) => sequelize.define(
+  'Comment',
+  {
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
-    {
-      freezeTableName: true,
-    }
-  );
-};
+    status: {
+      type: DataTypes.ENUM('active', 'inactive'),
+      defaultValue: 'active',
+    },
+  },
+  {
+    freezeTableName: true,
+  },
+);
