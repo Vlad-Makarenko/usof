@@ -6,6 +6,7 @@ const { User } = db.sequelize.models;
 const { Post } = db.sequelize.models;
 const { Category } = db.sequelize.models;
 const { PostCategory } = db.sequelize.models;
+const { Favorite } = db.sequelize.models;
 const limit = 10;
 
 const checkCategories = async (categories) => {
@@ -58,6 +59,18 @@ const createPost = async (UserId, title, content, categories = []) => {
     throw ApiError.BadRequestError('Wrong request');
   }
   return resultPost;
+};
+
+const AddToFavorite = async (UserId, PostId) => {
+  const isAdded = await Favorite.findOne({ where: { PostId, UserId } });
+  if (isAdded) {
+    throw ApiError.BadRequestError('Post is already added');
+  }
+  const conection = await Favorite.create({ UserId, PostId });
+  if (!conection) {
+    throw ApiError.BadRequestError('Wrong request');
+  }
+  return conection;
 };
 
 const getAllPosts = async (
@@ -157,6 +170,112 @@ const getAllPosts = async (
     currentPage: Number(page),
     totalPages: Math.ceil(totalPosts.length / limit),
     posts,
+  };
+};
+
+const getFavorites = async (
+  userId,
+  page = 1,
+  categoriesStr,
+  sort = 'likeCount,desc',
+  dateInterval,
+) => {
+  let categories;
+  if (categoriesStr) {
+    categories = categoriesStr.split(',');
+    for (const category of categories) {
+      const isExist = await Category.findOne({ where: { id: category } }).then(
+        (category) => category !== null,
+      );
+      if (!isExist) {
+        throw ApiError.BadRequestError(`Wrong category`);
+      }
+    }
+  }
+  const offset = (page - 1) * limit;
+  const oreder = sort.split(',')[0];
+  const direction = sort.split(',')[1] || 'DESC';
+  const allPosts = await Favorite.findAndCountAll({
+    where: {
+      UserId: userId,
+    },
+    attributes: [
+      [
+        sequelize.literal(`(
+        SELECT COUNT(like.id)
+        FROM \`like\`
+        WHERE like.PostId = favorite.PostId
+        AND like.type = 'like'
+      )`),
+        'likeCount',
+      ],
+    ],
+    include: [
+      {
+        model: Post,
+        where: {
+          ...(dateInterval
+            ? {
+                createdAt: {
+                  [sequelize.Op.lt]: new Date(),
+                  [sequelize.Op.gt]: new Date(Number(dateInterval)),
+                },
+              }
+            : {}),
+        },
+        attributes: [
+          'id',
+          'title',
+          'content',
+          'createdAt',
+          [
+            sequelize.literal(`(
+              SELECT COUNT(like.id)
+              FROM \`like\`
+              WHERE like.PostId = post.id
+              AND like.type = 'like'
+            )`),
+            'likeCount',
+          ],
+        ],
+        include: [
+          {
+            model: Category,
+            through: {
+              attributes: [],
+            },
+            where: {
+              ...(categoriesStr
+                ? { id: { [sequelize.Op.in]: categories } }
+                : {}),
+            },
+            as: 'categories',
+          },
+          {
+            model: User,
+            as: 'author',
+            attributes: ['login', 'full_name', 'profile_picture', 'rating'],
+          },
+        ],
+      },
+    ],
+    offset,
+    limit,
+    subQuery: false,
+    group: ['Post.id'],
+    order: [[oreder, direction]],
+  });
+  if (!allPosts) {
+    throw ApiError.NothingFoundError();
+  }
+  const { count: totalPosts, rows: posts } = allPosts;
+  return {
+    totalPosts: totalPosts.length,
+    currentPage: Number(page),
+    totalPages: Math.ceil(totalPosts.length / limit),
+    posts: posts.map((post) => {
+      return { ...post.dataValues, likeCount: undefined };
+    }),
   };
 };
 
@@ -260,6 +379,14 @@ const deletePost = async (role, postId, userId) => {
   }
 };
 
+const deleteFavorite = async (UserId, PostId) => {
+  const conection = await Favorite.findOne({ where: { UserId, PostId } });
+  if (!conection) {
+    throw ApiError.BadRequestError('Wrong request');
+  }
+  await conection.destroy();
+};
+
 const getPostCategories = async (postId) => {
   const post = await Post.findOne({
     where: {
@@ -286,9 +413,12 @@ const getPostCategories = async (postId) => {
 
 module.exports = {
   createPost,
+  AddToFavorite,
   getAllPosts,
+  getFavorites,
   getPost,
   updatePost,
   deletePost,
+  deleteFavorite,
   getPostCategories,
 };

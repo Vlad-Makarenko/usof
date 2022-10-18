@@ -33,7 +33,38 @@ const getAllPosts = async (req, res, next) => {
       categories,
       sort,
       date,
-      user
+      user,
+    );
+
+    res.status(200).json(posts);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const AddToFavorite = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequestError('validation error', errors.array()));
+    }
+    const { postId } = req.body;
+    const post = await postService.AddToFavorite(req.user.id, postId);
+    res.status(201).json(post);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getFavorites = async (req, res, next) => {
+  try {
+    const { page, categories, sort, date } = req.query;
+    const posts = await postService.getFavorites(
+      req.user.id,
+      page,
+      categories,
+      sort,
+      date,
     );
 
     res.status(200).json(posts);
@@ -70,6 +101,16 @@ const updatePost = async (req, res, next) => {
       categories,
     );
     res.status(201).json(post);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteFavorite = async (req, res, next) => {
+  try {
+    const postId = req.params.post_id;
+    await postService.deleteFavorite(req.user.id, postId);
+    return res.status(204).json({ message: 'Post deleted successfully' });
   } catch (err) {
     next(err);
   }
@@ -166,7 +207,9 @@ const deletePostLike = async (req, res, next) => {
 
 module.exports = {
   createPost,
+  AddToFavorite,
   getAllPosts,
+  getFavorites,
   getPost,
   updatePost,
   deletePost,
@@ -176,4 +219,5 @@ module.exports = {
   createPostLike,
   getPostLikes,
   deletePostLike,
+  deleteFavorite,
 };

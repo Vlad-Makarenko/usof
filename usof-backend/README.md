@@ -145,6 +145,11 @@ To Visit Admin Panel:
                 <td><code>getAllPosts(req, res, next)</code></td>
             </tr>
             <tr>
+                <td><code>GET - /api/posts/favorites</code></td>
+                <td>Get all favorites posts</td>
+                <td><code>getFavorites(req, res, next)</code></td>
+            </tr>
+            <tr>
                 <td><code>GET - /api/posts/:post_id</code></td>
                 <td>Get specified post data</td>
                 <td><code>getPost(req, res, next)</code></td>
@@ -171,8 +176,13 @@ To Visit Admin Panel:
             </tr>
             <tr>
                 <td><code>POST - /api/posts</code></td>
-                <td>Create a new post, required parameters are [title, content,categories]</td>
+                <td>Create a new post, required parameters are [title, content, categories]</td>
                 <td><code>createPost(req, res, next)</code></td>
+            </tr>
+            <tr>
+                <td><code>POST - /api/posts/favorites</code></td>
+                <td>Add a new post to favorites, required parameters is [postId]</td>
+                <td><code>AddToFavorite(req, res, next)</code></td>
             </tr>
             <tr>
                 <td><code>POST - /api/posts/:post_id/like</code></td>
@@ -183,6 +193,11 @@ To Visit Admin Panel:
                 <td><code>PATCH - /api/posts/:post_id</code></td>
                 <td>Update the specified post (its title, body orcategory</td>
                 <td><code>updatePost(req, res, next)</code></td>
+            </tr>
+            <tr>
+                <td><code>DELETE - /api/posts/favorites/:post_id</code></td>
+                <td>Delete a post from favorites</td>
+                <td><code>deleteFavorites(req, res, next)</code></td>
             </tr>
             <tr>
                 <td><code>DELETE - /api/posts/:post_id</code></td>

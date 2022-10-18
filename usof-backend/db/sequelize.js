@@ -5,6 +5,7 @@ const initPost = require('./Post');
 const initCategory = require('./Category');
 const initComment = require('./Comment');
 const initLike = require('./Like');
+const initFavorite = require('./Favorite');
 
 require('dotenv').config();
 
@@ -15,7 +16,7 @@ const sequelize = new Sequelize(
   {
     dialect: process.env.DB_DIALECT,
     host: process.env.DB_HOST,
-    // logging: false,
+    logging: false,
   },
 );
 
@@ -25,11 +26,13 @@ const Post = initPost(sequelize);
 const Category = initCategory(sequelize);
 const Comment = initComment(sequelize);
 const Like = initLike(sequelize);
+const Favorite = initFavorite(sequelize);
 
 User.hasOne(Token);
 User.hasMany(Post);
 User.hasMany(Comment);
 User.hasMany(Like);
+User.hasMany(Favorite);
 
 Token.belongsTo(User);
 
@@ -47,5 +50,8 @@ Comment.hasMany(Like);
 Like.belongsTo(Post);
 Like.belongsTo(Comment);
 Like.belongsTo(User, { as: 'author', foreignKey: 'UserId' });
+
+Favorite.belongsTo(User, { as: 'owner', foreignKey: 'UserId' });
+Favorite.belongsTo(Post);
 
 module.exports = { sequelize };

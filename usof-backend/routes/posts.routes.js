@@ -7,6 +7,7 @@ const userMdw = require('../middleware/user.middleware');
 const router = new Router();
 
 router.get('/', userMdw, postController.getAllPosts);
+router.get('/favorites', authMdw, postController.getFavorites);
 router.get('/:post_id', userMdw, postController.getPost);
 router.get('/:post_id/categories', postController.getPostCategories);
 router.get('/:post_id/comments', userMdw, postController.getPostComments);
@@ -17,6 +18,12 @@ router.post(
   body('content').trim().isLength({ min: 5, max: 65535 }),
   authMdw,
   postController.createPost,
+);
+router.post(
+  '/favorites',
+  body('postId').exists(),
+  authMdw,
+  postController.AddToFavorite,
 );
 router.post(
   '/:post_id/comments',
@@ -37,6 +44,7 @@ router.patch(
   authMdw,
   postController.updatePost,
 );
+router.delete('/favorites/:post_id', authMdw, postController.deleteFavorite);
 router.delete('/:post_id', authMdw, postController.deletePost);
 router.delete('/:post_id/like', authMdw, postController.deletePostLike);
 
