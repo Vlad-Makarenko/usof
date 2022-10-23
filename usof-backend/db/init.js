@@ -42,7 +42,7 @@ const bootStrapCategoryObject = async (titles) => {
         )
         .then((res) => res.data.items[0])
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
         });
       return {
         title,

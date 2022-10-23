@@ -61,7 +61,7 @@ const login = async (login, email, password) => {
   const user = await User.findOne({ where: { email, login } });
   if (!user) {
     throw ApiError.BadRequestError(
-      `User with email ${email} is not registered`,
+      `Incorrect login or email`,
     );
   }
   const isEqualsPswd = await bcrypt.compare(password, user.password);

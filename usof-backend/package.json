@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js",
+    "client": "npm run start --prefix ../usof-frontend",
+    "server": "nodemon app.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node app.js"
   },
   "author": "vmakarenko",
@@ -28,6 +30,7 @@
     "sequelize": "^6.21.4"
   },
   "devDependencies": {
+    "concurrently": "^7.5.0",
     "nodemon": "^2.0.19"
   }
 }

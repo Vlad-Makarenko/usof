@@ -22,6 +22,7 @@ const getAllUsers = async () => {
       'role',
       'createdAt',
     ],
+    order: [['rating', 'DESC']],
   });
   if (!users) {
     throw ApiError.NothingFoundError();
@@ -170,7 +171,8 @@ const updateUser = async (owner, data, id) => {
   }
   user.login = data.login ? data.login : user.login;
   user.full_name = data.full_name ? data.full_name : user.full_name;
-  user.profile_picture = data.avatar && !owner ? 'default.png' : user.profile_picture;
+  user.profile_picture =
+    data.avatar && !owner ? 'default.png' : user.profile_picture;
   await user.save();
   return user;
 };

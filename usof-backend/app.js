@@ -37,7 +37,7 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('static'));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
