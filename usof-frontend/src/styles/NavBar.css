@@ -1,0 +1,58 @@
+.NavBarMain{
+  border-top: 3px solid orange;
+  font-family: 'Lato', sans-serif;
+  box-shadow: 1px 1px 10px rgba(142, 74, 2, 0.5);
+}
+
+.NavProfile{
+  border: 1px solid transparent;
+  margin-right: 1px;
+  padding: 1px 10px 1px 10px;
+  cursor: pointer;
+}
+
+.NavProfile:hover {
+  border-radius: 7px;
+  border-left: 1px solid #e9e0c5;
+  border-right: 1px solid #e9e0c5;
+  background-color: #fcfaf4;
+}
+
+.NavLogout{
+  border: 1px solid transparent;
+  margin-right: 10px;
+  padding: 1px 10px 1px 10px;
+  cursor: pointer;
+}
+
+.NavLogout:hover {
+  border-radius: 7px;
+  border-left: 1px solid #e9e0c5;
+  border-right: 1px solid #e9e0c5;
+  background-color: #fcfaf4;
+}
+
+
+.NavAva{
+  box-shadow: 1px 1px 5px rgba(142, 74, 2, 0.5);
+  /* margin-right: 15px; */
+  margin-left: 15px;
+  height: 45px;
+  border-radius: 7px;
+}
+
+.signInBtn{
+  margin-right: 5px;
+
+}
+
+.signInBtn:hover {
+  background-color: #f9f5eb;
+  color:  #e1aa05;
+  border-color:  #e1aa05
+}
+
+.signInBtn{
+  margin-right: 5px;
+  margin-left: 5px;
+}

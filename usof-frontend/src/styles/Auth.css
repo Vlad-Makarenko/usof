@@ -1,0 +1,33 @@
+.signInForm{
+  padding-left: 20px;
+  padding-right: 20px;
+  /* width: 50%; */
+}
+
+.authForm{
+  border: 1px solid rgba(128, 128, 128, 0.501);
+  margin: 5px;
+  border-radius: 5px;
+}
+
+.authForm:hover{
+  border: 1px solid orange;
+}
+
+.authInput{
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  padding: 3%;
+}
+
+.authInput:focus {
+  border: 0;
+  outline: none;
+}
+
+.authForm:focus-within{
+  border: 1px solid orange;
+  box-shadow: 1px 1px 10px #8e4a0280;
+  box-shadow: 1px 1px 10px #ae5a0080;
+}
