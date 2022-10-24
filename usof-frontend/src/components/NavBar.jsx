@@ -18,7 +18,7 @@ export const NavBar = () => {
   const navigate = useNavigate();
 
   return (
-    <Navbar className="NavBarMain" bg="light" expand="lg">
+    <Navbar className="NavBarMain" bg="light" expand="lg" sticky="top">
       <Container>
         <Navbar.Brand>
           <NavLink to="/">

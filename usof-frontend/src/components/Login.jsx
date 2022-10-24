@@ -9,10 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { PswdInput } from './PswdInput';
 import faq from '../assets/auth.png';
-import '../styles/Auth.css';
 import { SignInOff, SignUpOn } from '../store/modalSlice';
 import { useMessage } from '../hooks/message.hook';
 import { clearError, signIn } from '../store/authSlice';
+import '../styles/Auth.css';
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -24,8 +24,14 @@ export const Login = () => {
   });
   const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
 
-  const signInHandler = () => {
-    dispatch(signIn(form));
+  const signInHandler = (e) => {
+    e.preventDefault();
+    if (!form.login.length || !form.email.length || !form.password.length) {
+      message('All fields must be filled', 'error');
+      console.log('all fields must be filled');
+    } else {
+      dispatch(signIn(form));
+    }
   };
 
   useEffect(() => {
@@ -50,103 +56,95 @@ export const Login = () => {
       <Row>
         <Col
           md={{ span: 5, offset: 1 }}
-          className="d-flex flex-column justify-content-center align-items-center signInForm"
         >
-          <h2>Sign In</h2>
-          <label htmlFor="email" style={{ alignSelf: 'start' }}>
-            Email:
-          </label>
-          <Container
-            className="d-flex align-items-center authForm"
-            style={{ width: '100%' }}
-          >
-            <At color="orange" />
-            <input
-              type="text"
-              onChange={changeHandler}
-              value={form.email}
-              name="email"
-              className="authInput"
-              placeholder="Email"
-            />
-          </Container>
-          <label htmlFor="login" style={{ alignSelf: 'start' }}>
-            Login:
-          </label>
-          <Container
-            className="d-flex align-items-center authForm"
-            style={{ width: '100%' }}
-          >
-            <PersonFill color="orange" />
-            <input
-              type="text"
-              onChange={changeHandler}
-              value={form.login}
-              name="login"
-              className="authInput"
-              placeholder="Login"
-            />
-          </Container>
-          <label htmlFor="password" style={{ alignSelf: 'start' }}>
-            Password:
-          </label>
-          <PswdInput
-            changeHandler={changeHandler}
-            passwordInput={form.password}
-          />
-          <span>
-            Forgot your password?
-            <span
-              style={{ color: 'orange', cursor: 'pointer' }}
-              onClick={() => {
-                dispatch(SignInOff());
-                dispatch(SignUpOn());
-              }}
+          <form onSubmit={signInHandler} className="d-flex flex-column justify-content-center align-items-center signInForm">
+            <h2>Sign In</h2>
+            <label htmlFor="email" style={{ alignSelf: 'start' }}>
+              Email:
+            </label>
+            <Container
+              className="d-flex align-items-center authForm"
+              style={{ width: '100%' }}
             >
-              {'  '}
-              Reset
-            </span>
-          </span>
-          <Button
-            className="mt-2 mb-2"
-            variant="warning"
-            style={{ width: '100%' }}
-            onClick={signInHandler}
-          >
-            Sign In
-          </Button>
-          <p>
-            Don’t have an account?
-            <span
-              style={{ color: 'orange', cursor: 'pointer' }}
-              onClick={() => {
-                dispatch(SignInOff());
-                dispatch(SignUpOn());
-              }}
+              <At color="orange" />
+              <input
+                type="email"
+                required
+                onChange={changeHandler}
+                value={form.email}
+                name="email"
+                className="authInput"
+                placeholder="Email"
+              />
+            </Container>
+            <label htmlFor="login" style={{ alignSelf: 'start' }}>
+              Login:
+            </label>
+            <Container
+              className="d-flex align-items-center authForm"
+              style={{ width: '100%' }}
             >
-              {'  '}
-              Sign Up
+              <PersonFill color="orange" />
+              <input
+                required
+                type="text"
+                onChange={changeHandler}
+                value={form.login}
+                name="login"
+                className="authInput"
+                placeholder="Login"
+              />
+            </Container>
+            <label htmlFor="password" style={{ alignSelf: 'start' }}>
+              Password:
+            </label>
+            <PswdInput
+              changeHandler={changeHandler}
+              passwordInput={form.password}
+            />
+            <span>
+              Forgot your password?
+              <span
+                style={{ color: 'orange', cursor: 'pointer' }}
+                onClick={() => {
+                  dispatch(SignInOff());
+                  dispatch(SignUpOn());
+                }}
+              >
+                {'  '}
+                Reset
+              </span>
             </span>
-          </p>
-
+            <Button
+              type="submit"
+              className="mt-2 mb-2 waves-effect"
+              variant="warning"
+              style={{ width: '100%' }}
+              disabled={isLoading}
+            >
+              {isLoading ? <Spinner animation="border" variant="black" /> : 'Sign In' }
+            </Button>
+            <p>
+              Don’t have an account?
+              <span
+                style={{ color: 'orange', cursor: 'pointer' }}
+                onClick={() => {
+                  dispatch(SignInOff());
+                  dispatch(SignUpOn());
+                }}
+              >
+                {'  '}
+                Sign Up
+              </span>
+            </p>
+          </form>
         </Col>
-        {isLoading
-          ? (
-            <Col
-              md={{ span: 5, offset: 1 }}
-              className="d-flex justify-content-center align-items-center"
-            >
-              <Spinner animation="border" variant="warning" />
-            </Col>
-          )
-          : (
-            <Col
-              md={{ span: 5, offset: 1 }}
-              className="d-flex justify-content-center align-items-center"
-            >
-              <img src={faq} width="100%" alt="aurh" />
-            </Col>
-          )}
+        <Col
+          md={{ span: 5, offset: 1 }}
+          className="d-flex justify-content-center align-items-center"
+        >
+          <img src={faq} width="100%" alt="aurh" />
+        </Col>
       </Row>
     </Container>
   );

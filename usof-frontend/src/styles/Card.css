@@ -1,0 +1,48 @@
+.TagCard {
+  width: 20%;
+  margin: 1%;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  animation: cardAppear 1s forwards;
+}
+
+.TagCard:hover {
+  box-shadow: 1px 1px 10px rgba(142, 74, 2, 0.5);
+}
+
+.serchForm{
+  width: 30%;
+  border: 1px solid rgba(128, 128, 128, 0.501);
+  margin: 5px;
+  border-radius: 5px;
+}
+
+.serchForm:hover{
+  border: 1px solid orange;
+}
+.searchInput{
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  padding: 3%;
+}
+
+.searchInput:focus {
+  border: 0;
+  outline: none;
+}
+
+.serchForm:focus-within{
+  border: 1px solid orange;
+  box-shadow: 1px 1px 10px #8e4a0280;
+  box-shadow: 1px 1px 10px #ae5a0080;
+}
+
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

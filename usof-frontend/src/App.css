@@ -1,6 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
-.App {
-  text-align: center;
+body {
   font-family: 'Lato', sans-serif;
+}
+
+.App {
+}
+
+.ColSideBar {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0;
+}
+
+.DivSideBar {
+  width: 100%;
+  position: sticky;
+  height: 90vh;
+  top: 80px;
 }

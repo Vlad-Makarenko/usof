@@ -18,6 +18,7 @@ export const PswdInput = ({ changeHandler, passwordInput }) => {
     <Container className="d-flex align-items-center authForm" style={{ width: '100%' }}>
       <LockFill color="orange" />
       <input
+        required
         type={passwordType}
         onChange={changeHandler}
         value={passwordInput}

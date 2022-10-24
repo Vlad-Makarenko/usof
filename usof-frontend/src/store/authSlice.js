@@ -51,7 +51,7 @@ const setError = (state, action) => {
   console.log('req error: ', action.payload);
 };
 
-const userSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState: {
     me: {
@@ -95,6 +95,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { clearError } = userSlice.actions;
+export const { clearError } = authSlice.actions;
 
-export default userSlice.reducer;
+export default authSlice.reducer;

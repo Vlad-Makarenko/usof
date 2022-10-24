@@ -1,0 +1,16 @@
+.activeSide {
+  /* border-right: 5px solid rgba(255, 166, 0, 0.6); */
+  /* background-color: rgba(255, 166, 0, 0.07); */
+  background-color: rgba(40, 40, 40, 0.1);
+  box-shadow: inset -10px 0 4px -6px #f8a100c5;
+  font-weight: bold;
+}
+
+.categoryTitle{
+  cursor: pointer;
+  padding: 10px;
+}
+
+.categoryTitle:first-child {
+  margin-top: 15px;
+}
