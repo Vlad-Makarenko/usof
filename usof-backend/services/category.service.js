@@ -1,10 +1,25 @@
+const sequelize = require('sequelize');
 const db = require('../db/sequelize');
 const ApiError = require('../utils/ApiError');
 
 const { Category } = db.sequelize.models;
 
 const getAllCategories = async () => {
-  const categories = await Category.findAll();
+  const categories = await Category.findAll({
+    attributes: [
+      'id',
+      'title',
+      'description',
+      [
+        sequelize.literal(`(
+					SELECT COUNT(postcategory.CategoryId)
+					FROM \`postcategory\`
+					WHERE postcategory.CategoryId = category.id
+				)`),
+        'questionsCount',
+      ],
+    ],
+  });
   if (!categories) {
     throw ApiError.NothingFoundError();
   }
@@ -12,7 +27,21 @@ const getAllCategories = async () => {
 };
 
 const getCategory = async (id) => {
-  const category = await Category.findByPk(id);
+  const category = await Category.findByPk(id, {
+    attributes: [
+      'id',
+      'title',
+      'description',
+      [
+        sequelize.literal(`(
+					SELECT COUNT(postcategory.CategoryId)
+					FROM \`postcategory\`
+					WHERE postcategory.CategoryId = category.id
+				)`),
+        'questionsCount',
+      ],
+    ],
+  });
   if (!category) {
     throw ApiError.NothingFoundError();
   }
