@@ -3,6 +3,7 @@ import loadingReducer from './loadingSlice';
 import modalReducer from './modalSlice';
 import userReducer from './userSlice';
 import authReducer from './authSlice';
+import postReducer from './postSlice';
 import tagReducer from './tagSlice';
 
 export default configureStore({
@@ -12,5 +13,6 @@ export default configureStore({
     modal: modalReducer,
     auth: authReducer,
     tag: tagReducer,
+    post: postReducer,
   },
 });

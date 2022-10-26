@@ -87,7 +87,9 @@ export const Tags = () => {
           md={12}
           className="d-flex align-items-center justify-content-between mb-3 mt-3"
         >
-          <SrchInput changeHandler={searchHandler} searchInput={search} />
+          <div className="d-flex align-items-center justify-content-center" style={{ width: '30%' }}>
+            <SrchInput changeHandler={searchHandler} searchInput={search} />
+          </div>
           <ButtonGroup aria-label="Basic example" style={{ marginRight: '1%' }}>
             <Button
               variant="outline-dark"

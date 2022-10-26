@@ -1,6 +1,11 @@
 import React from 'react';
 import {
-  Container, Navbar, Nav, Button,
+  Container,
+  Navbar,
+  Nav,
+  Button,
+  OverlayTrigger,
+  Tooltip,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -27,35 +32,51 @@ export const NavBar = () => {
         </Navbar.Brand>
         {isAuthenticated ? (
           <Nav>
-            <Nav.Item
-              className="d-flex justify-content-center align-items-center NavProfile"
-              onClick={() => {
-                navigate('/profile');
-              }}
+            <OverlayTrigger
+              key="order"
+              placement="bottom"
+              overlay={<Tooltip id="tooltip-bottom">Profile</Tooltip>}
             >
-              <div className="d-flex flex-column justify-content-center align-items-center">
-                <span style={{ fontSize: '20px' }}>{me.login}</span>
-                {me.role === 'admin' ? (
-                  <span style={{ fontSize: '10px', color: '#a57926' }}>{me.role}</span>
-                ) : (
-                  <div />
-                )}
-              </div>
-              <div>
-                <img
-                  className="NavAva"
-                  src={`${SERVER_URL}/avatars/${me.avatar}`}
-                  alt="ava"
-                />
-              </div>
-            </Nav.Item>
-            <Nav.Item
-              className="d-flex flex-column justify-content-center align-items-center NavLogout"
-              onClick={() => { dispatch(logOut()); }}
+              <Nav.Item
+                className="d-flex justify-content-center align-items-center NavProfile"
+                onClick={() => {
+                  navigate('/profile');
+                }}
+              >
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <span style={{ fontSize: '20px' }}>{me.login}</span>
+                  {me.role === 'admin' ? (
+                    <span style={{ fontSize: '10px', color: '#a57926' }}>
+                      {me.role}
+                    </span>
+                  ) : (
+                    <div />
+                  )}
+                </div>
+                <div>
+                  <img
+                    className="NavAva"
+                    src={`${SERVER_URL}/avatars/${me.avatar}`}
+                    alt="ava"
+                  />
+                </div>
+              </Nav.Item>
+            </OverlayTrigger>
+            <OverlayTrigger
+              key="order"
+              placement="bottom"
+              overlay={<Tooltip id="tooltip-bottom">Logout</Tooltip>}
             >
-              <img src={logout} height="30" alt="logout" />
-              <span style={{ fontSize: '10px' }}>Logout</span>
-            </Nav.Item>
+              <Nav.Item
+                className="d-flex flex-column justify-content-center align-items-center NavLogout"
+                onClick={() => {
+                  dispatch(logOut());
+                }}
+              >
+
+                <img src={logout} height="35" alt="logout" />
+              </Nav.Item>
+            </OverlayTrigger>
           </Nav>
         ) : (
           <Nav className="d-flex justify-content-around">

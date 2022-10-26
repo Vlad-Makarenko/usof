@@ -11,7 +11,6 @@ export const checkAuth = createAsyncThunk(
         withCredentials: true,
       });
       localStorage.setItem('token', response.data.accessToken);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
