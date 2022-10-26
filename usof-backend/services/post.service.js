@@ -155,10 +155,10 @@ const getAllPosts = async (
         attributes: ['login', 'full_name', 'profile_picture', 'rating'],
       },
     ],
-    offset,
-    limit,
+    ...(page > 0 ? { offset } : {}),
+    ...(page > 0 ? { limit } : {}),
     subQuery: false,
-    group: ['Post.id'],
+    ...(page > 0 ? { group: ['Post.id'] } : {}),
     order: [[oreder, direction]],
   });
   if (!allPosts) {
