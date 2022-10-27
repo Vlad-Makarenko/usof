@@ -135,6 +135,14 @@ const getAllPosts = async (
 				)`),
         'likeCount',
       ],
+      [
+        sequelize.literal(`(
+          SELECT COUNT(comment.id)
+          FROM comment
+          WHERE comment.PostId = post.id
+        )`),
+        'answerCount',
+      ],
     ],
     include: [
       {
@@ -142,17 +150,15 @@ const getAllPosts = async (
         through: {
           attributes: [],
         },
-        where: {
-          ...(categoriesStr || force
-            ? { id: { [sequelize.Op.in]: categories } }
-            : {}),
-        },
+        ...(categoriesStr || force
+          ? { where: { id: { [sequelize.Op.in]: categories } } }
+          : {}),
         as: 'categories',
       },
       {
         model: User,
         as: 'author',
-        attributes: ['login', 'full_name', 'profile_picture', 'rating'],
+        attributes: ['id', 'login', 'full_name', 'profile_picture', 'rating'],
       },
     ],
     ...(page > 0 ? { offset } : {}),
@@ -254,7 +260,7 @@ const getFavorites = async (
           {
             model: User,
             as: 'author',
-            attributes: ['login', 'full_name', 'profile_picture', 'rating'],
+            attributes: ['id', 'login', 'full_name', 'profile_picture', 'rating'],
           },
         ],
       },
@@ -322,7 +328,7 @@ const getPost = async (role, postId, userId) => {
       {
         model: User,
         as: 'author',
-        attributes: ['login', 'full_name', 'profile_picture', 'rating'],
+        attributes: ['id', 'login', 'full_name', 'profile_picture', 'rating'],
       },
     ],
   });
