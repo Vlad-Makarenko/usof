@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
 import { API_URL, DEFAUL_FILTERS } from '../utils/constants';
-import { countTotalPages, filterPosts as filterPostsUtils } from '../utils/postsUtils';
+import { countTotalPages, filterPosts as filterPostsUtils, getCurentPosts } from '../utils/postsUtils';
 
 export const getAllPosts = createAsyncThunk(
   'post/getAllPosts',
@@ -49,6 +49,7 @@ const postSlice = createSlice({
     post: {},
     totalPages: 1,
     currentPage: 1,
+    currentPagePosts: [],
     error: null,
     isLoading: false,
   },
@@ -69,11 +70,12 @@ const postSlice = createSlice({
       );
       state.filteredPosts = filteredPosts;
       state.totalPages = countTotalPages(filteredPosts);
+      state.currentPagePosts = getCurentPosts(filteredPosts, 1);
+      state.currentPage = 1;
     },
-    searchPosts(state, action) {
-      const tempPosts = action.payload.posts;
-      const searchStr = action.payload.searchInput;
-      state.filteredPosts = tempPosts.filter((value) => value.title.includes(searchStr));
+    changePage(state, action) {
+      state.currentPage = action.payload.page;
+      state.currentPagePosts = getCurentPosts(action.payload.posts, action.payload.page);
     },
     resetFilters(state, action) {
       const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
@@ -88,8 +90,10 @@ const postSlice = createSlice({
     },
     [getAllPosts.fulfilled]: (state, action) => {
       state.allPosts = action.payload.posts;
-      state.filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
+      const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
+      state.filteredPosts = filteredPosts;
       state.totalPages = countTotalPages(action.payload.posts);
+      state.currentPagePosts = getCurentPosts(filteredPosts, 1);
       state.isLoading = false;
     },
     // [checkAuth.fulfilled]: (state, action) => {
@@ -106,7 +110,7 @@ const postSlice = createSlice({
 });
 
 export const {
-  clearError, updateFilters, clearFilters, filterPosts, resetFilters, searchPosts,
+  clearError, updateFilters, clearFilters, filterPosts, resetFilters, changePage,
 } = postSlice.actions;
 
 export default postSlice.reducer;

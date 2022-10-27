@@ -14,6 +14,7 @@ import {
 import { getAllTags, setDefaulTag } from '../store/tagSlice';
 import { Tag } from '../components/Tag';
 import { SrchInput } from '../components/SrchInput';
+import { Nothing } from '../components/Nothing';
 
 export const Tags = () => {
   const dispatch = useDispatch();
@@ -74,7 +75,12 @@ export const Tags = () => {
         </Col>
         <Col md={2} className="d-flex align-items-center">
           {tag.id ? (
-            <Button variant="outline-warning" onClick={() => { navigate('/'); }}>
+            <Button
+              variant="outline-warning"
+              onClick={() => {
+                navigate('/');
+              }}
+            >
               {tag.questionsCount}
               {' '}
               questions
@@ -87,7 +93,10 @@ export const Tags = () => {
           md={12}
           className="d-flex align-items-center justify-content-between mb-3 mt-3"
         >
-          <div className="d-flex align-items-center justify-content-center" style={{ width: '30%' }}>
+          <div
+            className="d-flex align-items-center justify-content-center"
+            style={{ width: '30%' }}
+          >
             <SrchInput changeHandler={searchHandler} searchInput={search} />
           </div>
           <ButtonGroup aria-label="Basic example" style={{ marginRight: '1%' }}>
@@ -122,11 +131,17 @@ export const Tags = () => {
             <Spinner animation="border" variant="warning" />
           </Col>
         ) : (
-          <Col md={12} className="d-flex justify-content-around flex-wrap">
-            {displayedTags.map((category) => (
-              <Tag key={category.id} tag={category} />
-            ))}
-          </Col>
+          <>
+            {displayedTags.length ? (
+              <Col md={12} className="d-flex justify-content-around flex-wrap">
+                {displayedTags.map((category) => (
+                  <Tag key={category.id} tag={category} />
+                ))}
+              </Col>
+            ) : (
+              <Nothing />
+            )}
+          </>
         )}
       </Row>
     </Container>

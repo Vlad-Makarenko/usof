@@ -55,7 +55,7 @@
   color: rgb(180, 117, 0);
 }
 
-.postTitle:hover   {
+.postTitle:hover {
   text-decoration: underline;
   color: rgb(180, 117, 0);
 }
@@ -67,4 +67,21 @@
   100% {
     opacity: 1;
   }
+}
+
+.page-link:hover {
+  background-color: black;
+  color: white;
+}
+
+.page-link {
+  color: black;
+}
+
+.active > .page-link,
+.page-link.active {
+  z-index: 3;
+  background-color: black;
+  color: white;
+  border-color: black;
 }

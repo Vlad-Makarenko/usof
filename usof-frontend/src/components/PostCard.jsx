@@ -10,11 +10,7 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap';
-import {
-  HandThumbsUpFill,
-  ChatTextFill,
-  Clock,
-} from 'react-bootstrap-icons';
+import { HandThumbsUpFill, ChatTextFill, Clock } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { AVATAR_URL } from '../utils/constants';
@@ -23,9 +19,7 @@ import '../styles/Card.css';
 export const PostCard = ({ post }) => {
   const navigate = useNavigate();
   return (
-    <Container
-      className="PostCard w-100 m-2 pb-3 pt-2"
-    >
+    <Container className="PostCard w-100 m-2 pb-3 pt-2">
       <Row>
         <Col
           md={2}
@@ -62,7 +56,12 @@ export const PostCard = ({ post }) => {
               {post.title}
             </h5>
             <div>
-              {post.categories.map((tag) => (
+              <span>
+                {post.content.length > 100
+                  ? `${post.content.slice(0, 100)}...`
+                  : post.content}
+              </span>
+              {/* {post.categories.map((tag) => (
                 <Button
                   key={tag.id}
                   variant="warning"
@@ -70,7 +69,7 @@ export const PostCard = ({ post }) => {
                 >
                   <span style={{ fontSize: '14px' }}>{tag.title}</span>
                 </Button>
-              ))}
+              ))} */}
             </div>
           </div>
         </Col>
@@ -102,8 +101,19 @@ export const PostCard = ({ post }) => {
             style={{ borderTop: '1px solid rgba(0, 0, 0, 0.05)' }}
           />
         </Col>
+        <Col md={8} className="mt-1 ps-5">
+          {post.categories.map((tag) => (
+            <Button
+              key={tag.id}
+              variant="warning"
+              className="pe-2 ps-2 pt-0 pb-1 me-1"
+            >
+              <span style={{ fontSize: '14px' }}>{tag.title}</span>
+            </Button>
+          ))}
+        </Col>
         <Col
-          md={12}
+          md={4}
           className="d-flex justify-content-end align-items-center"
           style={{ color: 'rgba(0, 0, 0, 0.5)' }}
         >

@@ -10,7 +10,6 @@ import { PAGE_LIMIT } from './constants';
 export const filterPosts = (posts, filters) => {
   let resultPosts = [];
 
-  // resultPosts = posts.filter((value) => value.title.includes(filters.search));
   resultPosts = posts.filter((value) =>
     value.title.toLowerCase().includes(filters.search.toLowerCase()));
 
