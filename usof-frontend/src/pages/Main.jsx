@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Moment from 'react-moment';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -20,6 +19,7 @@ import { SrchInput } from '../components/SrchInput';
 import { DATE_RADIOS, DEFAUL_FILTERS, SORT_RADIOS } from '../utils/constants';
 import { getAllTags } from '../store/tagSlice';
 import { TagsSideBar } from '../components/TagsSideBar';
+import { PostCard } from '../components/PostCard';
 
 export const Main = () => {
   const location = useLocation();
@@ -176,25 +176,8 @@ export const Main = () => {
               md={12}
               className="d-flex flex-column align-items-center justify-content-between mt-4"
             >
-              {filteredPosts?.map((post, idx) => (
-                <div key={post.id}>
-                  <p>
-                    id:
-                    {post.id}
-                    idx:
-                    {' '}
-                    {idx}
-                  </p>
-                  <p>
-                    title:
-                    {post.title}
-                  </p>
-                  <p>
-                    time:
-                    {post.createdAt}
-                  </p>
-                  <Moment fromNow>{post.createdAt}</Moment>
-                </div>
+              {filteredPosts?.map((post) => (
+                <PostCard post={post} key={post.id} />
               ))}
             </Col>
           )}

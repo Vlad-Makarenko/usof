@@ -33,7 +33,7 @@ export const NavBar = () => {
         {isAuthenticated ? (
           <Nav>
             <OverlayTrigger
-              key="order"
+              key="profile"
               placement="bottom"
               overlay={<Tooltip id="tooltip-bottom">Profile</Tooltip>}
             >
@@ -63,7 +63,7 @@ export const NavBar = () => {
               </Nav.Item>
             </OverlayTrigger>
             <OverlayTrigger
-              key="order"
+              key="logout"
               placement="bottom"
               overlay={<Tooltip id="tooltip-bottom">Logout</Tooltip>}
             >

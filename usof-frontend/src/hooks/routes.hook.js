@@ -7,12 +7,14 @@ import { Main } from '../pages/Main';
 import { Profile } from '../pages/Profile';
 import { User } from '../pages/User';
 import { Users } from '../pages/Users';
+import { Post } from '../pages/Post';
 
 export const useRoutes = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   return (
     <Routes path>
       <Route path="/" element={<Main />} exact />
+      <Route path="/post/:id" element={<Post />} exact />
       <Route path="/users" element={<Users />} exact />
       <Route path="/users/:id" element={<User />} exact />
       <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/" replace />} exact />
