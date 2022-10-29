@@ -34,13 +34,14 @@ export const NavBar = () => {
           <Nav>
             <OverlayTrigger
               key="profile"
+              delay={{ show: 300 }}
               placement="bottom"
               overlay={<Tooltip id="tooltip-bottom">Profile</Tooltip>}
             >
               <Nav.Item
                 className="d-flex justify-content-center align-items-center NavProfile"
                 onClick={() => {
-                  navigate('/profile');
+                  navigate(`/users/${me.id}`);
                 }}
               >
                 <div className="d-flex flex-column justify-content-center align-items-center">
@@ -64,6 +65,7 @@ export const NavBar = () => {
             </OverlayTrigger>
             <OverlayTrigger
               key="logout"
+              delay={{ show: 300 }}
               placement="bottom"
               overlay={<Tooltip id="tooltip-bottom">Logout</Tooltip>}
             >

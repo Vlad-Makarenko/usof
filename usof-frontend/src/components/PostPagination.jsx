@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pagination } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePage } from '../store/postSlice';
@@ -15,6 +15,11 @@ export const PostPagination = () => {
     const posts = [...filteredPosts];
     dispatch(changePage({ page, posts }));
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   if (!totalPages) {
     return <div />;
   }

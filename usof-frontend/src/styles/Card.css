@@ -50,6 +50,10 @@
   box-shadow: 0px 0px 3px rgba(142, 74, 2, 0.5);
 }
 
+.userInfo {
+  cursor: pointer;
+}
+
 .userInfo:hover {
   text-decoration: underline;
   color: rgb(180, 117, 0);

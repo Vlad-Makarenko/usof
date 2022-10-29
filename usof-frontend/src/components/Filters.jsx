@@ -10,14 +10,14 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { ArrowDown, ArrowRepeat, ArrowUp } from 'react-bootstrap-icons';
-import { changePage, filterPosts, getAllPosts } from '../store/postSlice';
+import { filterPosts, getAllPosts } from '../store/postSlice';
 import { SrchInput } from './SrchInput';
 import { DATE_RADIOS, DEFAUL_FILTERS, SORT_RADIOS } from '../utils/constants';
 import { getAllTags } from '../store/tagSlice';
 
 export const Filters = ({ localFilter, setLocalFilter }) => {
   const dispatch = useDispatch();
-  const { allPosts, filteredPosts, currentPage } = useSelector((state) => state.post);
+  const { allPosts } = useSelector((state) => state.post);
 
   const [info, setInfo] = useState('New');
 
@@ -76,6 +76,7 @@ export const Filters = ({ localFilter, setLocalFilter }) => {
           >
             <OverlayTrigger
               key="reset"
+              delay={{ show: 300 }}
               placement="bottom"
               overlay={
                 <Tooltip id="tooltip-bottom">Clear filters</Tooltip>
@@ -92,6 +93,7 @@ export const Filters = ({ localFilter, setLocalFilter }) => {
             <OverlayTrigger
               key="order"
               placement="bottom"
+              delay={{ show: 300 }}
               overlay={(
                 <Tooltip id="tooltip-bottom">
                   Order by
@@ -114,7 +116,7 @@ export const Filters = ({ localFilter, setLocalFilter }) => {
             </OverlayTrigger>
           </ButtonGroup>
           <ButtonGroup className="me-2">
-            {SORT_RADIOS.map((radio, idx) => (
+            {SORT_RADIOS.map((radio) => (
               <ToggleButton
                 key={radio.value}
                 id={`radio-${radio.value}`}
@@ -130,7 +132,7 @@ export const Filters = ({ localFilter, setLocalFilter }) => {
             ))}
           </ButtonGroup>
           <ButtonGroup className="me-2">
-            {DATE_RADIOS.map((radio, idx) => (
+            {DATE_RADIOS.map((radio) => (
               <ToggleButton
                 key={radio.value}
                 id={`radio-${radio.value}`}

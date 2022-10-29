@@ -7,15 +7,25 @@ import { countTotalPages, filterPosts as filterPostsUtils, getCurentPosts } from
 export const getAllPosts = createAsyncThunk(
   'post/getAllPosts',
   async (_, { rejectWithValue }) => {
-    // const { filters } = getState().posts;
     try {
-      // const response = await api.get(
-      // eslint-disable-next-line max-len
-      //   `${API_URL}/posts/?page=${filters.page}&date=${filters.date}&categories=${filters.categories}&sort=${filters.sort}&user=${filters.user}`,
-      // );
       const response = await api.get(`${API_URL}/posts/?page=-1`);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getPost = createAsyncThunk(
+  'post/getPost',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const postResponse = await api.get(`${API_URL}/posts/${id}`);
+      const likesResponse = await api.get(`${API_URL}/posts/${id}/like`);
+      // console.log({ post: postResponse.data, like: likesResponse.data });
+      return { post: postResponse.data, like: likesResponse.data };
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.response.data);
@@ -35,6 +45,54 @@ export const ceatePost = createAsyncThunk(
   },
 );
 
+export const ceateLike = createAsyncThunk(
+  'post/ceateLike',
+  async ({ id, type }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`${API_URL}/posts/${id}/like`, { type });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const deleteLike = createAsyncThunk(
+  'post/deleteLike',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`${API_URL}/posts/${id}/like`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const addToFavorite = createAsyncThunk(
+  'post/addToFavorite',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`${API_URL}/posts/favorites/`, { postId: id });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const removeFromFavorite = createAsyncThunk(
+  'post/removeFromFavorite',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`${API_URL}/posts/favorites/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 const setError = (state, action) => {
   state.isLoading = false;
   state.error = action.payload.message;
@@ -47,6 +105,7 @@ const postSlice = createSlice({
     allPosts: [],
     filteredPosts: [],
     post: {},
+    postVote: {},
     totalPages: 1,
     currentPage: 1,
     currentPagePosts: [],
@@ -88,6 +147,10 @@ const postSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
+    [getPost.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
     [getAllPosts.fulfilled]: (state, action) => {
       state.allPosts = action.payload.posts;
       const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
@@ -96,16 +159,34 @@ const postSlice = createSlice({
       state.currentPagePosts = getCurentPosts(filteredPosts, 1);
       state.isLoading = false;
     },
-    // [checkAuth.fulfilled]: (state, action) => {
-    //   state.me = { ...action.payload, acceessToken: undefined };
-    //   state.isAuthenticated = true;
-    // },
-    // [logOut.fulfilled]: (state) => {
-    //   state.me = {};
-    //   state.isAuthenticated = false;
-    // },
+    [getPost.fulfilled]: (state, action) => {
+      state.post = action.payload.post;
+      state.postVote = action.payload.like;
+      state.isLoading = false;
+    },
+    [ceateLike.fulfilled]: (state, action) => {
+      state.post.likeCount = action.payload.type === 'like' ? state.post.likeCount + 1 : state.post.likeCount;
+      if (state.postVote && action.payload.type === 'dislike') {
+        state.post.likeCount -= 1;
+      }
+      state.postVote = action.payload;
+    },
+    [deleteLike.fulfilled]: (state) => {
+      state.post.likeCount = state.postVote.type === 'like' ? state.post.likeCount - 1 : state.post.likeCount;
+      state.postVote = null;
+    },
+    [addToFavorite.fulfilled]: (state) => {
+      state.post.favoriteCount += 1;
+    },
+    [removeFromFavorite.fulfilled]: (state) => {
+      state.post.favoriteCount -= 1;
+    },
     [getAllPosts.rejected]: setError,
-    // [logOut.rejected]: setError,
+    [getPost.rejected]: setError,
+    [ceateLike.rejected]: setError,
+    [deleteLike.rejected]: setError,
+    [addToFavorite.rejected]: setError,
+    [removeFromFavorite.rejected]: setError,
   },
 });
 

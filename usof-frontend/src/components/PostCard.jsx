@@ -10,7 +10,9 @@ import {
   Row,
   Tooltip,
 } from 'react-bootstrap';
-import { HandThumbsUpFill, ChatTextFill, Clock } from 'react-bootstrap-icons';
+import {
+  HandThumbsUpFill, ChatTextFill, Clock, BookmarkFill,
+} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { AVATAR_URL } from '../utils/constants';
@@ -28,6 +30,7 @@ export const PostCard = ({ post }) => {
         >
           <OverlayTrigger
             key="like"
+            delay={{ show: 300 }}
             placement="left"
             overlay={<Tooltip id="tooltip-left">Likes</Tooltip>}
           >
@@ -38,12 +41,24 @@ export const PostCard = ({ post }) => {
           </OverlayTrigger>
           <OverlayTrigger
             key="answers"
+            delay={{ show: 300 }}
             placement="left"
             overlay={<Tooltip id="tooltip-left">Answers</Tooltip>}
           >
             <div className="d-flex align-items-center justify-content-center">
               <span className="me-2">{post.answerCount}</span>
               <ChatTextFill color="orange" />
+            </div>
+          </OverlayTrigger>
+          <OverlayTrigger
+            key="favorites"
+            delay={{ show: 300 }}
+            placement="left"
+            overlay={<Tooltip id="tooltip-left">Favorites</Tooltip>}
+          >
+            <div className="d-flex align-items-center justify-content-center">
+              <span className="me-2">{post.favoriteCount}</span>
+              <BookmarkFill color="orange" />
             </div>
           </OverlayTrigger>
         </Col>
@@ -61,21 +76,13 @@ export const PostCard = ({ post }) => {
                   ? `${post.content.slice(0, 100)}...`
                   : post.content}
               </span>
-              {/* {post.categories.map((tag) => (
-                <Button
-                  key={tag.id}
-                  variant="warning"
-                  className="pe-2 ps-2 pt-0 pb-1 me-1"
-                >
-                  <span style={{ fontSize: '14px' }}>{tag.title}</span>
-                </Button>
-              ))} */}
             </div>
           </div>
         </Col>
         <Col md={2}>
           <OverlayTrigger
             key="author"
+            delay={{ show: 300 }}
             placement="right"
             overlay={<Tooltip id="tooltip-right">Post author</Tooltip>}
           >
@@ -117,11 +124,24 @@ export const PostCard = ({ post }) => {
           className="d-flex justify-content-end align-items-center"
           style={{ color: 'rgba(0, 0, 0, 0.5)' }}
         >
-          <span>asked </span>
-          <Moment fromNow className="ms-1">
-            {post.createdAt}
-          </Moment>
-          <Clock className="me-3 ms-1 mt-1" />
+          <OverlayTrigger
+            key="time"
+            placement="right"
+            delay={{ show: 300 }}
+            overlay={(
+              <Tooltip id="tooltip-right">
+                <Moment format="D MMM YYYY, HH:mm">{post.createdAt}</Moment>
+              </Tooltip>
+            )}
+          >
+            <div className="d-flex align-items-center">
+              <span>asked </span>
+              <Moment fromNow className="ms-1">
+                {post.createdAt}
+              </Moment>
+              <Clock className="me-3 ms-1 mt-1" />
+            </div>
+          </OverlayTrigger>
         </Col>
       </Row>
     </Container>

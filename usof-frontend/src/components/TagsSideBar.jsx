@@ -22,6 +22,7 @@ export const TagsSideBar = ({ filter, filterControl }) => {
       <h2>Top Tags</h2>
       {displayedTags.map((tag) => (
         <OverlayTrigger
+          delay={{ show: 300 }}
           key={tag.title}
           placement="left"
           overlay={

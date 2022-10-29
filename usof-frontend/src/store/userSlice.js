@@ -1,16 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
 import { API_URL } from '../utils/constants';
-import { toggleLoading } from './loadingSlice';
 
 export const getAllUsers = createAsyncThunk(
   'user/getAllUsers',
-  async (_, { rejectWithValue, dispatch }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      dispatch(toggleLoading(true));
       const response = await api.get(`${API_URL}/users`);
       console.log('Loading', Date.now());
-      dispatch(toggleLoading(false));
 
       return response.data;
     } catch (error) {
@@ -32,10 +29,12 @@ const userSlice = createSlice({
       role: 'admin',
       createdAt: Date.now(),
     },
+    isLoading: false,
   },
   reducers: {},
   extraReducers: {
     [getAllUsers.pending]: (state) => {
+      state.isLoading = true;
       console.log('Loading pending');
     },
     [getAllUsers.fulfilled]: (state, action) => {

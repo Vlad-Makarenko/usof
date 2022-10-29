@@ -20,6 +20,11 @@ const App = () => {
   const routes = useRoutes();
   const dispatch = useDispatch();
   const { signIn, signUp } = useSelector((state) => state.modal);
+  const { error: postErr } = useSelector((state) => state.post);
+  const { error: tagErr } = useSelector((state) => state.tag);
+  const { error: authErr } = useSelector((state) => state.auth);
+  const { error: userErr } = useSelector((state) => state.user);
+  const { error: CommentErr } = useSelector((state) => state.comment);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -27,12 +32,24 @@ const App = () => {
     }
   }, []);
 
-  // const message = useMessage();
-  // const { error } = useSelector((state) => state.auth);
-  // useEffect(() => {
-  //   message(error, 'error');
-  //   console.log(error);
-  // }, [error]);
+  const message = useMessage();
+
+  useEffect(() => {
+    message(postErr, 'error');
+  }, [postErr]);
+  useEffect(() => {
+    message(tagErr, 'error');
+  }, [tagErr]);
+  useEffect(() => {
+    message(authErr, 'error');
+  }, [authErr]);
+  useEffect(() => {
+    message(userErr, 'error');
+  }, [userErr]);
+  useEffect(() => {
+    message(CommentErr, 'error');
+  }, [CommentErr]);
+
   return (
     <Router>
       <NavBar />
@@ -44,11 +61,7 @@ const App = () => {
             </div>
           </Col>
           <Col md={10} id="page-content-wrapper">
-            <div
-              className="App"
-            >
-              {routes}
-            </div>
+            <div className="App">{routes}</div>
           </Col>
         </Row>
       </Container>

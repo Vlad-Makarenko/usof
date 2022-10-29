@@ -76,14 +76,19 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
+    [checkAuth.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
     [signIn.fulfilled]: (state, action) => {
       state.me = { ...action.payload, acceessToken: undefined };
-      state.isLoading = false;
       state.isAuthenticated = true;
+      state.isLoading = false;
     },
     [checkAuth.fulfilled]: (state, action) => {
       state.me = { ...action.payload, acceessToken: undefined };
       state.isAuthenticated = true;
+      state.isLoading = false;
     },
     [logOut.fulfilled]: (state) => {
       state.me = {};

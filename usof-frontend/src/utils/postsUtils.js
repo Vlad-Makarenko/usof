@@ -1,6 +1,7 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable operator-linebreak */
-import { PAGE_LIMIT } from './constants';
+import api from '../http';
+import { API_URL, PAGE_LIMIT } from './constants';
 
 /**
  *
@@ -71,4 +72,13 @@ export const getCurentPosts = (posts, page) => {
     return posts.slice(offset, offset + PAGE_LIMIT);
   }
   return [];
+};
+
+export const checkSaved = async (postId) => {
+  try {
+    const { data } = await api.get(`${API_URL}/posts/favorites`);
+    return data.posts.filter((post) => post.Post.id === postId).length;
+  } catch (error) {
+    console.log(error);
+  }
 };
