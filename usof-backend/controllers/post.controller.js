@@ -188,7 +188,7 @@ const getPostLikes = async (req, res, next) => {
   try {
     const postId = req.params.post_id;
     const { type } = req.query;
-    const likes = await likeService.getPostlikes(postId, type);
+    const likes = await likeService.getPostlikes(postId, type, req.user.id);
     res.status(200).json(likes);
   } catch (err) {
     next(err);

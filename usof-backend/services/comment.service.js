@@ -20,14 +20,14 @@ const getComment = async (role, commentId, userId) => {
       ...(role === 'public'
         ? { status: 'active' }
         : {
-          [sequelize.Op.or]: [
-            { status: 'active' },
-            {
-              status: 'inactive',
-              ...(role === 'user' ? { UserId: userId } : {}),
-            },
-          ],
-        }),
+            [sequelize.Op.or]: [
+              { status: 'active' },
+              {
+                status: 'inactive',
+                ...(role === 'user' ? { UserId: userId } : {}),
+              },
+            ],
+          }),
     },
     attributes: [
       'id',
@@ -140,14 +140,14 @@ const getPostComments = async (PostId, role, UserId) => {
       ...(role === 'public'
         ? { status: 'active' }
         : {
-          [sequelize.Op.or]: [
-            { status: 'active' },
-            {
-              status: 'inactive',
-              ...(role === 'user' ? { UserId } : {}),
-            },
-          ],
-        }),
+            [sequelize.Op.or]: [
+              { status: 'active' },
+              {
+                status: 'inactive',
+                ...(role === 'user' ? { UserId } : {}),
+              },
+            ],
+          }),
     },
     attributes: [
       'id',
@@ -166,13 +166,13 @@ const getPostComments = async (PostId, role, UserId) => {
     include: {
       model: User,
       as: 'author',
-      attributes: ['login', 'full_name', 'profile_picture', 'rating'],
+      attributes: ['id', 'login', 'full_name', 'profile_picture', 'rating'],
     },
   });
 
-  if (!comments.length) {
-    throw ApiError.NothingFoundError();
-  }
+  // if (!comments.length) {
+  //   throw ApiError.NothingFoundError();
+  // }
   return comments;
 };
 

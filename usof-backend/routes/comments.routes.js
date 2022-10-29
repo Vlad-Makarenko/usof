@@ -7,7 +7,7 @@ const userMdw = require('../middleware/user.middleware');
 const router = new Router();
 
 router.get('/:comment_id', userMdw, commentController.getComment);
-router.get('/:comment_id/like', commentController.getCommentLikes);
+router.get('/:comment_id/like',userMdw, commentController.getCommentLikes);
 router.post(
   '/:comment_id/like',
   body('type').exists(),

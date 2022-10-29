@@ -11,7 +11,7 @@ router.get('/favorites', authMdw, postController.getFavorites);
 router.get('/:post_id', userMdw, postController.getPost);
 router.get('/:post_id/categories', postController.getPostCategories);
 router.get('/:post_id/comments', userMdw, postController.getPostComments);
-router.get('/:post_id/like', postController.getPostLikes);
+router.get('/:post_id/like', userMdw, postController.getPostLikes);
 router.post(
   '/',
   body('title').trim().isLength({ min: 2, max: 256 }),

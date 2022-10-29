@@ -10,13 +10,13 @@ const { Like } = db.sequelize.models;
 const updateRating = async (type, UserId, count = 1) => {
   type === 'like'
     ? await User.update(
-      { rating: sequelize.literal(`rating + ${count}`) },
-      { where: { id: UserId } },
-    )
+        { rating: sequelize.literal(`rating + ${count}`) },
+        { where: { id: UserId } },
+      )
     : await User.update(
-      { rating: sequelize.literal(`rating - ${count}`) },
-      { where: { id: UserId } },
-    );
+        { rating: sequelize.literal(`rating - ${count}`) },
+        { where: { id: UserId } },
+      );
 };
 
 const createPostLike = async (PostId, UserId, type) => {
@@ -43,10 +43,11 @@ const createPostLike = async (PostId, UserId, type) => {
   return like;
 };
 
-const getPostlikes = async (PostId, type) => {
-  const likes = await Like.findAll({
+const getPostlikes = async (PostId, type, UserId) => {
+  const likes = await Like.findOne({
     where: {
       PostId,
+      ...(UserId ? { UserId } : {}),
       ...(type ? { type } : {}),
     },
     include: {
@@ -56,9 +57,9 @@ const getPostlikes = async (PostId, type) => {
     },
   });
 
-  if (!likes.length) {
-    throw ApiError.NothingFoundError();
-  }
+  // if (!likes.length) {
+  //   throw ApiError.NothingFoundError();
+  // }
   return likes;
 };
 
@@ -107,10 +108,11 @@ const createCommentLike = async (CommentId, UserId, type) => {
   return like;
 };
 
-const getCommentlikes = async (CommentId, type) => {
-  const likes = await Like.findAll({
+const getCommentlikes = async (CommentId, type, UserId) => {
+  const likes = await Like.findOne({
     where: {
       CommentId,
+      ...(UserId ? { UserId } : {}),
       ...(type ? { type } : {}),
     },
     include: {
@@ -120,9 +122,9 @@ const getCommentlikes = async (CommentId, type) => {
     },
   });
 
-  if (!likes.length) {
-    throw ApiError.NothingFoundError();
-  }
+  // if (!likes.length) {
+  //   throw ApiError.NothingFoundError();
+  // }
   return likes;
 };
 

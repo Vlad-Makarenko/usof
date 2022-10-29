@@ -143,6 +143,14 @@ const getAllPosts = async (
         )`),
         'answerCount',
       ],
+      [
+        sequelize.literal(`(
+					SELECT COUNT(favorite.id)
+					FROM \`favorite\`
+					WHERE favorite.PostId = post.id
+				)`),
+        'favoriteCount',
+      ],
     ],
     include: [
       {
@@ -315,6 +323,22 @@ const getPost = async (role, postId, userId) => {
           AND like.type = 'like'
 				)`),
         'likeCount',
+      ],
+      [
+        sequelize.literal(`(
+					SELECT COUNT(favorite.id)
+					FROM \`favorite\`
+					WHERE favorite.PostId = post.id
+				)`),
+        'favoriteCount',
+      ],
+      [
+        sequelize.literal(`(
+          SELECT COUNT(comment.id)
+          FROM comment
+          WHERE comment.PostId = post.id
+        )`),
+        'answerCount',
       ],
     ],
     include: [
