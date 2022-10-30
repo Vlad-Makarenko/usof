@@ -33,11 +33,39 @@ export const getPost = createAsyncThunk(
   },
 );
 
-export const ceatePost = createAsyncThunk(
-  'post/ceatePost',
+export const createPost = createAsyncThunk(
+  'post/createPost',
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.post(`${API_URL}/posts`, payload);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const updatePost = createAsyncThunk(
+  'post/updatePost',
+  async ({
+    id, content, title, categories, status,
+  }, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`${API_URL}/posts/${id}`, {
+        content, title, categories, status,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`${API_URL}/posts/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -151,6 +179,10 @@ const postSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
+    [createPost.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
     [getAllPosts.fulfilled]: (state, action) => {
       state.allPosts = action.payload.posts;
       const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
@@ -162,6 +194,16 @@ const postSlice = createSlice({
     [getPost.fulfilled]: (state, action) => {
       state.post = action.payload.post;
       state.postVote = action.payload.like;
+      state.isLoading = false;
+    },
+    [createPost.fulfilled]: (state, action) => {
+      state.post = action.payload;
+      state.isLoading = false;
+    },
+    [updatePost.fulfilled]: (state, action) => {
+      state.post.status = action.payload.status;
+      state.post.content = action.payload.content;
+      state.post.title = action.payload.title;
       state.isLoading = false;
     },
     [ceateLike.fulfilled]: (state, action) => {
@@ -183,10 +225,12 @@ const postSlice = createSlice({
     },
     [getAllPosts.rejected]: setError,
     [getPost.rejected]: setError,
+    [createPost.rejected]: setError,
     [ceateLike.rejected]: setError,
     [deleteLike.rejected]: setError,
     [addToFavorite.rejected]: setError,
     [removeFromFavorite.rejected]: setError,
+    [updatePost.rejected]: setError,
   },
 });
 

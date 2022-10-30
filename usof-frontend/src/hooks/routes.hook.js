@@ -8,6 +8,7 @@ import { Profile } from '../pages/Profile';
 import { User } from '../pages/User';
 import { Users } from '../pages/Users';
 import { Post } from '../pages/Post';
+import { Ask } from '../pages/Ask';
 
 export const useRoutes = () => {
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -15,6 +16,7 @@ export const useRoutes = () => {
     <Routes path>
       <Route path="/" element={<Main />} exact />
       <Route path="/post/:id" element={<Post />} exact />
+      <Route path="/ask" element={<Ask />} exact />
       <Route path="/users" element={<Users />} exact />
       <Route path="/users/:id" element={<User />} exact />
       {/* <Route path="/profile"

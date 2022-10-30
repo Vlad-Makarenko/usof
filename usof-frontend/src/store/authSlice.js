@@ -23,7 +23,8 @@ export const signIn = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.post(`${API_URL}/auth/login`, payload);
-      localStorage.setItem('token', response.data.acceessToken);
+      console.table({ ...response.data });
+      localStorage.setItem('token', response.data.accessToken);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -59,7 +60,7 @@ const authSlice = createSlice({
       full_name: '',
       profile_picture: 'default.png',
       rating: 0,
-      role: 'admin',
+      role: 'user',
       createdAt: Date.now(),
     },
     isAuthenticated: false,
@@ -81,12 +82,12 @@ const authSlice = createSlice({
       state.error = null;
     },
     [signIn.fulfilled]: (state, action) => {
-      state.me = { ...action.payload, acceessToken: undefined };
+      state.me = { ...action.payload, accessToken: undefined };
       state.isAuthenticated = true;
       state.isLoading = false;
     },
     [checkAuth.fulfilled]: (state, action) => {
-      state.me = { ...action.payload, acceessToken: undefined };
+      state.me = { ...action.payload, accessToken: undefined };
       state.isAuthenticated = true;
       state.isLoading = false;
     },
@@ -96,6 +97,10 @@ const authSlice = createSlice({
     },
     [signIn.rejected]: setError,
     [logOut.rejected]: setError,
+    [checkAuth.rejected]: (state, action) => {
+      state.isLoading = false;
+      console.log('req error: ', action.payload);
+    },
   },
 });
 

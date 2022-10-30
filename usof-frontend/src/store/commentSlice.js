@@ -34,6 +34,29 @@ export const getComment = createAsyncThunk(
   },
 );
 
+export const updateComment = createAsyncThunk(
+  'comment/updateComment',
+  async ({ id, content }, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`${API_URL}/comments/${id}`, { content });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const deleteComment = createAsyncThunk(
+  'comment/deleteComment',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      await api.delete(`${API_URL}/comments/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 export const ceateComment = createAsyncThunk(
   'comment/ceateComment',
   async ({ content, id }, { rejectWithValue }) => {
@@ -89,6 +112,9 @@ const commentSlice = createSlice({
     clearError(state) {
       state.error = null;
     },
+    setComment(state, action) {
+      state.comment = action.payload;
+    },
   },
   extraReducers: {
     [getAllComments.pending]: (state) => {
@@ -106,6 +132,11 @@ const commentSlice = createSlice({
     [getComment.fulfilled]: (state, action) => {
       state.comment = action.payload;
       state.isLoading = false;
+    },
+    [updateComment.fulfilled]: (state, action) => {
+      const { id } = action.payload;
+      const idx = state.allComments.findIndex(((obj) => obj.comment.id === Number(id)));
+      state.allComments[idx].comment = action.payload;
     },
     [createCommentLike.fulfilled]: (state, action) => {
       const { CommentId } = action.payload;
@@ -138,9 +169,10 @@ const commentSlice = createSlice({
     [createCommentLike.rejected]: setError,
     [deleteCommentLike.rejected]: setError,
     [ceateComment.rejected]: setError,
+    [updateComment.rejected]: setError,
   },
 });
 
-export const { clearError } = commentSlice.actions;
+export const { clearError, setComment } = commentSlice.actions;
 
 export default commentSlice.reducer;

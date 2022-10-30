@@ -8,18 +8,24 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useRoutes } from './hooks/routes.hook';
 import { NavBar } from './components/NavBar';
 import { ModalWin } from './components/ModalWin';
-import { SignInOff, SignUpOff } from './store/modalSlice';
+import {
+  EditCommentOff, EditPostOff, SignInOff, SignUpOff,
+} from './store/modalSlice';
 
 import './App.css';
 import { Login } from './components/Login';
 import { useMessage } from './hooks/message.hook';
 import { checkAuth } from './store/authSlice';
 import { LeftSideBar } from './components/LeftSideBar';
+import { PostForm } from './components/PostForm';
+import { Answer } from './components/Answer';
 
 const App = () => {
   const routes = useRoutes();
   const dispatch = useDispatch();
-  const { signIn, signUp } = useSelector((state) => state.modal);
+  const {
+    signIn, signUp, editPost, editComment,
+  } = useSelector((state) => state.modal);
   const { error: postErr } = useSelector((state) => state.post);
   const { error: tagErr } = useSelector((state) => state.tag);
   const { error: authErr } = useSelector((state) => state.auth);
@@ -71,6 +77,12 @@ const App = () => {
       </ModalWin>
       <ModalWin show={signUp} onHide={() => dispatch(SignUpOff())}>
         <h1>Sign Up</h1>
+      </ModalWin>
+      <ModalWin show={editPost} onHide={() => dispatch(EditPostOff())}>
+        <PostForm isEditing />
+      </ModalWin>
+      <ModalWin show={editComment} onHide={() => dispatch(EditCommentOff())}>
+        <Answer isEditing />
       </ModalWin>
     </Router>
   );

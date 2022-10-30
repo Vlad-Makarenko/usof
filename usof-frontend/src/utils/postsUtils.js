@@ -82,3 +82,5 @@ export const checkSaved = async (postId) => {
     console.log(error);
   }
 };
+
+export const tagsToSelect = (tags) => tags.map((tag) => ({ value: tag.title, label: tag.title }));

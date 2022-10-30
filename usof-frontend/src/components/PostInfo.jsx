@@ -13,11 +13,14 @@ import {
   Bookmark,
   BookmarkCheckFill,
   Clock,
+  EyeFill,
+  EyeSlashFill,
   HandThumbsDown,
   HandThumbsDownFill,
   HandThumbsUp,
   HandThumbsUpFill,
   PenFill,
+  Trash3Fill,
 } from 'react-bootstrap-icons';
 import Moment from 'react-moment';
 import { useNavigate } from 'react-router-dom';
@@ -28,14 +31,17 @@ import {
   addToFavorite,
   ceateLike,
   deleteLike,
+  deletePost,
   removeFromFavorite,
+  updatePost,
 } from '../store/postSlice';
+import { EditPostOn } from '../store/modalSlice';
 
 export const PostInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { post, postVote, isLoading } = useSelector((state) => state.post);
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, me } = useSelector((state) => state.auth);
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
@@ -61,8 +67,12 @@ export const PostInfo = () => {
   return (
     <Row
       // style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }}
-      style={{ border: '1px solid rgba(0, 0, 0, 0.2)', borderRadius: '20px' }}
-      className="w-100 pt-2 pb-4"
+      style={{
+        border: '1px solid rgba(0, 0, 0, 0.2)',
+        borderRadius: '20px',
+        backgroundColor: 'rgba(0, 0, 0, 0.03)',
+      }}
+      className="w-100 pt-2 pb-4 mt-1"
     >
       <Col md={2} className="d-flex flex-column align-items-center pb-3">
         <Container
@@ -180,8 +190,77 @@ export const PostInfo = () => {
         style={{ borderLeft: '1px solid rgba(0, 0, 0, 0.2)' }}
       >
         <Container fluid>
-          <h1>{post.title}</h1>
-          <p>{post.content}</p>
+          <div className="d-flex align-items-center justify-content-between">
+            <h1>{post.title}</h1>
+            {(me.id === post.author?.id || me.role === 'admin') && (
+              <div className="d-flex align-items-center">
+                <OverlayTrigger
+                  key="status"
+                  delay={{ show: 300 }}
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id="tooltip-bottom">Change status</Tooltip>
+                  }
+                >
+                  <Button
+                    key="ChangeBtn"
+                    variant="outline-dark"
+                    className="pe-2 ps-2 pt-0 pb-1 me-1"
+                  >
+                    {post.status === 'active' ? (
+                      <EyeFill
+                        onClick={() => {
+                          dispatch(updatePost({ ...post, status: 'inactive', categories: undefined }));
+                        }}
+                      />
+                    ) : (
+                      <EyeSlashFill
+                        onClick={() => {
+                          dispatch(updatePost({ ...post, status: 'active', categories: undefined }));
+                        }}
+                      />
+                    )}
+                  </Button>
+                </OverlayTrigger>
+                {me.id === post.author?.id && (
+                  <OverlayTrigger
+                    key="editPost"
+                    delay={{ show: 300 }}
+                    placement="bottom"
+                    overlay={<Tooltip id="tooltip-bottom">Edit post</Tooltip>}
+                  >
+                    <Button
+                      key="editBtn"
+                      variant="outline-dark"
+                      className="pe-2 ps-2 pt-0 pb-1 me-1"
+                      onClick={() => dispatch(EditPostOn())}
+                    >
+                      <PenFill />
+                    </Button>
+                  </OverlayTrigger>
+                )}
+                <OverlayTrigger
+                  key="delete"
+                  delay={{ show: 300 }}
+                  placement="bottom"
+                  overlay={<Tooltip id="tooltip-bottom">Delete post</Tooltip>}
+                >
+                  <Button
+                    key="deleteBtn"
+                    variant="outline-dark"
+                    className="pe-2 ps-2 pt-0 pb-1 me-1"
+                    onClick={() => {
+                      dispatch(deletePost({ id: post.id }));
+                      navigate('/');
+                    }}
+                  >
+                    <Trash3Fill />
+                  </Button>
+                </OverlayTrigger>
+              </div>
+            )}
+          </div>
+          <p style={{ whiteSpace: 'pre' }}>{post.content}</p>
         </Container>
       </Col>
       <Col

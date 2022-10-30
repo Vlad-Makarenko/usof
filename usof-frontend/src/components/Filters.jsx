@@ -9,6 +9,7 @@ import {
   ToggleButton,
   Tooltip,
 } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { ArrowDown, ArrowRepeat, ArrowUp } from 'react-bootstrap-icons';
 import { filterPosts, getAllPosts } from '../store/postSlice';
 import { SrchInput } from './SrchInput';
@@ -17,6 +18,7 @@ import { getAllTags } from '../store/tagSlice';
 
 export const Filters = ({ localFilter, setLocalFilter }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { allPosts } = useSelector((state) => state.post);
 
   const [info, setInfo] = useState('New');
@@ -54,7 +56,7 @@ export const Filters = ({ localFilter, setLocalFilter }) => {
           {' '}
           Questions
         </h2>
-        <Button variant="outline-dark">Ask Question</Button>
+        <Button variant="outline-dark" onClick={() => { navigate('/ask'); }}>Ask Question</Button>
       </Col>
       <Col
         md={12}

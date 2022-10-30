@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import {
+  Button,
   Col, Container, OverlayTrigger, Row, Tooltip,
 } from 'react-bootstrap';
 import {
@@ -10,17 +11,24 @@ import {
   HandThumbsDownFill,
   HandThumbsUp,
   HandThumbsUpFill,
+  PenFill,
+  Trash3Fill,
 } from 'react-bootstrap-icons';
 import Moment from 'react-moment';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AVATAR_URL } from '../utils/constants';
-import { createCommentLike, deleteCommentLike } from '../store/commentSlice';
+import {
+  createCommentLike, deleteComment, deleteCommentLike, setComment,
+} from '../store/commentSlice';
+import { EditCommentOn } from '../store/modalSlice';
 
 export const CommentInfo = ({ comment, commentVote }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.comment);
+  const { me } = useSelector((state) => state.auth);
+
   // const { isAuthenticated } = useSelector((state) => state.auth);
 
   if (isLoading) {
@@ -30,7 +38,7 @@ export const CommentInfo = ({ comment, commentVote }) => {
   return (
     <Row
       // style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }}
-      style={{ border: '1px solid rgba(0, 0, 0, 0.2)', borderRadius: '20px' }}
+      style={{ border: '1px solid rgba(0, 0, 0, 0.2)', borderRadius: '20px', backgroundColor: 'rgba(0, 0, 0, 0.03)' }}
       className="w-100 pt-2 pb-2 mt-3"
     >
       <Col md={2} className="d-flex flex-column align-items-center pb-3">
@@ -119,9 +127,50 @@ export const CommentInfo = ({ comment, commentVote }) => {
           <p>{comment.content}</p>
         </Container>
         <Container
-          className="d-flex justify-content-end"
+          className="d-flex justify-content-between"
           style={{ color: 'rgba(0, 0, 0, 0.5)' }}
         >
+          {(me.id === comment.author?.id || me.role === 'admin') ? (
+            <div className="d-flex align-items-center">
+              {me.id === comment.author?.id && (
+              <OverlayTrigger
+                key="editComment"
+                delay={{ show: 300 }}
+                placement="bottom"
+                overlay={<Tooltip id="tooltip-bottom">Edit comment</Tooltip>}
+              >
+                <Button
+                  key="editBtn"
+                  variant="outline-dark"
+                  className="pe-2 ps-2 pt-0 pb-1 me-1"
+                  onClick={() => {
+                    dispatch(setComment(comment));
+                    dispatch(EditCommentOn());
+                  }}
+                >
+                  <PenFill />
+                </Button>
+              </OverlayTrigger>
+              )}
+              <OverlayTrigger
+                key="delete"
+                delay={{ show: 300 }}
+                placement="bottom"
+                overlay={<Tooltip id="tooltip-bottom">Delete comment</Tooltip>}
+              >
+                <Button
+                  key="deleteBtn"
+                  variant="outline-dark"
+                  className="pe-2 ps-2 pt-0 pb-1 me-1"
+                  onClick={() => {
+                    dispatch(deleteComment({ id: comment.id }));
+                  }}
+                >
+                  <Trash3Fill />
+                </Button>
+              </OverlayTrigger>
+            </div>
+          ) : <div />}
           <OverlayTrigger
             key="time"
             delay={{ show: 300 }}
