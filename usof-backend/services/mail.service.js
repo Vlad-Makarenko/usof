@@ -20,7 +20,7 @@ class MailService {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: `Account activation at ${process.env.API_URL}`,
+      subject: `Account activation at Stack Overclone`,
       text: '',
       html: `
                 <div>
@@ -33,11 +33,11 @@ class MailService {
 
   async sendPswResetMail(to) {
     const { accessToken } = tokenService.generateTokens({ email: to });
-    const link = `${process.env.API_URL}/api/auth/password-reset/${accessToken}`;
+    const link = `${process.env.CLIENT_URL}/password-reset/${accessToken}`;
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: `Password reset for ${process.env.API_URL}`,
+      subject: `Password reset for Stack Overclone`,
       text: '',
       html: `
                 <div>

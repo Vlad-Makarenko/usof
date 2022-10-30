@@ -62,6 +62,10 @@ const passwordReset = async (req, res, next) => {
 
 const passwordConfirm = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequestError('validation error', errors.array()));
+    }
     const token = req.params.confirm_token;
     const { password, repeatedPassword } = req.body;
     await authService.passwordConfirm(token, password, repeatedPassword);
