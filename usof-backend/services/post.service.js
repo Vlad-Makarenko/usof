@@ -313,6 +313,7 @@ const getPost = async (role, postId, userId) => {
       'id',
       'title',
       'content',
+      'status',
       'createdAt',
       'updatedAt',
       [

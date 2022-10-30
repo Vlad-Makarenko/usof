@@ -14,8 +14,8 @@ router.get('/:post_id/comments', userMdw, postController.getPostComments);
 router.get('/:post_id/like', userMdw, postController.getPostLikes);
 router.post(
   '/',
-  body('title').trim().isLength({ min: 2, max: 256 }),
-  body('content').trim().isLength({ min: 5, max: 65535 }),
+  body('title').trim().isLength({ min: 10, max: 256 }),
+  body('content').trim().isLength({ min: 20, max: 65535 }),
   authMdw,
   postController.createPost,
 );
@@ -39,8 +39,8 @@ router.post(
 );
 router.patch(
   '/:post_id',
-  body('title').trim().isLength({ min: 2, max: 256 }),
-  body('content').trim().isLength({ min: 5, max: 65535 }),
+  body('title').trim().isLength({ min: 10, max: 256 }),
+  body('content').trim().isLength({ min: 20, max: 65535 }),
   authMdw,
   postController.updatePost,
 );
