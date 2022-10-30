@@ -2,6 +2,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ResetPassword } from '../pages/ResetPassword';
 import { Tags } from '../pages/Tags';
 import { Main } from '../pages/Main';
 import { Profile } from '../pages/Profile';
@@ -19,6 +20,7 @@ export const useRoutes = () => {
       <Route path="/ask" element={<Ask />} exact />
       <Route path="/users" element={<Users />} exact />
       <Route path="/users/:id" element={<User />} exact />
+      <Route path="/password-reset/:token" element={<ResetPassword />} exact />
       {/* <Route path="/profile"
       element={isAuthenticated ? <Profile /> : <Navigate to="/" replace />} exact /> */}
       <Route path="/tags" element={<Tags />} exact />

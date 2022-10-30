@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill, LockFill } from 'react-bootstrap-icons';
 
-export const PswdInput = ({ changeHandler, passwordInput }) => {
+export const PswdInput = ({ changeHandler, passwordInput, isRepeated }) => {
   const [passwordType, setPasswordType] = useState('password');
 
   const togglePassword = () => {
@@ -22,9 +22,9 @@ export const PswdInput = ({ changeHandler, passwordInput }) => {
         type={passwordType}
         onChange={changeHandler}
         value={passwordInput}
-        name="password"
+        name={isRepeated ? 'repeatedPassword' : 'password'}
         className="authInput"
-        placeholder="Password"
+        placeholder={isRepeated ? 'Repeate password' : 'Password'}
       />
       <div onClick={togglePassword} className="d-flex align-items-center">
         {passwordType === 'password' ? (

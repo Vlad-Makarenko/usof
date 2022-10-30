@@ -7,6 +7,7 @@ const modalSlice = createSlice({
     signUp: false,
     editPost: false,
     editComment: false,
+    resetPswd: false,
   },
   reducers: {
     SignInOn(state) {
@@ -33,11 +34,26 @@ const modalSlice = createSlice({
     EditCommentOff(state) {
       state.editComment = false;
     },
+    ResetPswdOn(state) {
+      state.resetPswd = true;
+    },
+    ResetPswdOff(state) {
+      state.resetPswd = false;
+    },
   },
 });
 
 export const {
-  SignInOn, SignInOff, SignUpOn, SignUpOff, EditPostOn, EditPostOff, EditCommentOn, EditCommentOff,
+  SignInOn,
+  SignInOff,
+  SignUpOn,
+  SignUpOff,
+  EditPostOn,
+  EditPostOff,
+  EditCommentOn,
+  EditCommentOff,
+  ResetPswdOn,
+  ResetPswdOff,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

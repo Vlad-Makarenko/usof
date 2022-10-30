@@ -4,41 +4,43 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
-import { At, PersonFill } from 'react-bootstrap-icons';
+import { At, EmojiSmile, PersonFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { PswdInput } from './PswdInput';
-import faq from '../assets/auth.png';
-import { ResetPswdOn, SignInOff, SignUpOn } from '../store/modalSlice';
+import { SignInOn, SignUpOff } from '../store/modalSlice';
 import { useMessage } from '../hooks/message.hook';
-import { clearError, signIn } from '../store/authSlice';
+import { clearError, signUp } from '../store/authSlice';
+import faq from '../assets/background.png';
 import '../styles/Auth.css';
 
-export const Login = () => {
+export const Register = () => {
   const dispatch = useDispatch();
   const message = useMessage();
   const [form, setForm] = useState({
     login: '',
     email: '',
     password: '',
+    repeatedPassword: '',
+    full_name: '',
   });
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { isLoading, error, isAuthenticated, success } = useSelector((state) => state.auth);
 
-  const signInHandler = (e) => {
+  const signUpHandler = (e) => {
     e.preventDefault();
     if (!form.login.length || !form.email.length || !form.password.length) {
       message('All fields must be filled', 'error');
       console.log('all fields must be filled');
     } else {
-      dispatch(signIn(form));
+      dispatch(signUp(form));
     }
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(SignInOff());
+    if (isAuthenticated || success) {
+      dispatch(SignUpOff());
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, success]);
 
   useEffect(() => {
     if (error) {
@@ -53,12 +55,11 @@ export const Login = () => {
 
   return (
     <Container>
-      <Row>
-        <Col
-          md={{ span: 5, offset: 1 }}
-        >
-          <form onSubmit={signInHandler} className="d-flex flex-column justify-content-center align-items-center signInForm">
-            <h2>Sign In</h2>
+      <h2>Sign Up</h2>
+      <form onSubmit={signUpHandler} className="d-flex flex-column justify-content-center align-items-center">
+        <Row>
+
+          <Col md={6} className="d-flex flex-column justify-content-center align-items-center">
             <label htmlFor="email" style={{ alignSelf: 'start' }}>
               Email:
             </label>
@@ -95,26 +96,24 @@ export const Login = () => {
                 placeholder="Login"
               />
             </Container>
-            <label htmlFor="password" style={{ alignSelf: 'start' }}>
-              Password:
+            <label htmlFor="login" style={{ alignSelf: 'start' }}>
+              Full Name:
             </label>
-            <PswdInput
-              changeHandler={changeHandler}
-              passwordInput={form.password}
-            />
-            <span>
-              Forgot your password?
-              <span
-                style={{ color: 'orange', cursor: 'pointer' }}
-                onClick={() => {
-                  dispatch(SignInOff());
-                  dispatch(ResetPswdOn());
-                }}
-              >
-                {'  '}
-                Reset
-              </span>
-            </span>
+            <Container
+              className="d-flex align-items-center authForm"
+              style={{ width: '100%' }}
+            >
+              <EmojiSmile color="orange" />
+              <input
+                required
+                type="text"
+                onChange={changeHandler}
+                value={form.full_name}
+                name="full_name"
+                className="authInput"
+                placeholder="Full Name"
+              />
+            </Container>
             <Button
               type="submit"
               className="mt-2 mb-2 waves-effect"
@@ -122,30 +121,47 @@ export const Login = () => {
               style={{ width: '100%' }}
               disabled={isLoading}
             >
-              {isLoading ? <Spinner animation="border" variant="black" /> : 'Sign In' }
+              {isLoading ? <Spinner animation="border" variant="black" /> : 'Sign Up' }
             </Button>
             <p>
-              Don’t have an account?
+              Already have an account?
               <span
                 style={{ color: 'orange', cursor: 'pointer' }}
                 onClick={() => {
-                  dispatch(SignInOff());
-                  dispatch(SignUpOn());
+                  dispatch(SignUpOff());
+                  dispatch(SignInOn());
                 }}
               >
                 {'  '}
-                Sign Up
+                Sign In
               </span>
             </p>
-          </form>
-        </Col>
-        <Col
-          md={{ span: 5, offset: 1 }}
-          className="d-flex justify-content-center align-items-center"
-        >
-          <img src={faq} width="100%" alt="aurh" />
-        </Col>
-      </Row>
+          </Col>
+          <Col
+            md={6}
+            className="d-flex flex-column align-items-center"
+          >
+            <label htmlFor="password" style={{ alignSelf: 'start' }}>
+              Password:
+            </label>
+            <PswdInput
+              changeHandler={changeHandler}
+              passwordInput={form.password}
+            />
+            <label htmlFor="password" style={{ alignSelf: 'start' }}>
+              Repeat password:
+            </label>
+            <PswdInput
+              changeHandler={changeHandler}
+              passwordInput={form.repeatedPassword}
+              isRepeated
+            />
+            <Container className="d-flex align-items-center h-100">
+              <img src={faq} width="100%" alt="auth" />
+            </Container>
+          </Col>
+        </Row>
+      </form>
     </Container>
   );
 };

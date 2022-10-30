@@ -191,7 +191,7 @@ export const PostInfo = () => {
       >
         <Container fluid>
           <div className="d-flex align-items-center justify-content-between">
-            <h1>{post.title}</h1>
+            <h2 style={{ maxWidth: '80%', wordWrap: 'break-word' }}>{post.title}</h2>
             {(me.id === post.author?.id || me.role === 'admin') && (
               <div className="d-flex align-items-center">
                 <OverlayTrigger

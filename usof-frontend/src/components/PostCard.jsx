@@ -66,6 +66,7 @@ export const PostCard = ({ post }) => {
           <div className="d-flex flex-column align-items-start justify-content-center">
             <h5
               className="postTitle"
+              style={{ maxWidth: '100%', wordWrap: 'break-word' }}
               onClick={() => navigate(`/post/${post.id}`)}
             >
               {post.title}

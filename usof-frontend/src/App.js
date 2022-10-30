@@ -9,7 +9,7 @@ import { useRoutes } from './hooks/routes.hook';
 import { NavBar } from './components/NavBar';
 import { ModalWin } from './components/ModalWin';
 import {
-  EditCommentOff, EditPostOff, SignInOff, SignUpOff,
+  EditCommentOff, EditPostOff, ResetPswdOff, SignInOff, SignUpOff,
 } from './store/modalSlice';
 
 import './App.css';
@@ -19,12 +19,14 @@ import { checkAuth } from './store/authSlice';
 import { LeftSideBar } from './components/LeftSideBar';
 import { PostForm } from './components/PostForm';
 import { Answer } from './components/Answer';
+import { Register } from './components/Register';
+import { ResetPswd } from './components/ResetPswd';
 
 const App = () => {
   const routes = useRoutes();
   const dispatch = useDispatch();
   const {
-    signIn, signUp, editPost, editComment,
+    signIn, signUp, editPost, editComment, resetPswd,
   } = useSelector((state) => state.modal);
   const { error: postErr } = useSelector((state) => state.post);
   const { error: tagErr } = useSelector((state) => state.tag);
@@ -76,7 +78,10 @@ const App = () => {
         <Login />
       </ModalWin>
       <ModalWin show={signUp} onHide={() => dispatch(SignUpOff())}>
-        <h1>Sign Up</h1>
+        <Register />
+      </ModalWin>
+      <ModalWin show={resetPswd} onHide={() => dispatch(ResetPswdOff())}>
+        <ResetPswd />
       </ModalWin>
       <ModalWin show={editPost} onHide={() => dispatch(EditPostOff())}>
         <PostForm isEditing />
