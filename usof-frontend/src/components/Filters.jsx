@@ -20,6 +20,7 @@ export const Filters = ({ localFilter, setLocalFilter, isUser }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { allPosts } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.user);
 
   const [info, setInfo] = useState('New');
 
@@ -56,9 +57,7 @@ export const Filters = ({ localFilter, setLocalFilter, isUser }) => {
         className="d-flex align-items-center justify-content-between mb-4"
       >
         <h2>
-          {info}
-          {' '}
-          Questions
+          {isUser ? `${user.login}\`s Questions` : `${info} Questions` }
         </h2>
         <Button variant="outline-dark" onClick={() => { navigate('/ask'); }}>Ask Question</Button>
       </Col>

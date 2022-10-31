@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import { Switch, useDarkreader } from 'react-darkreader';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import { useRoutes } from './hooks/routes.hook';
@@ -35,6 +36,7 @@ function ScrollToTop() {
 const App = () => {
   const routes = useRoutes();
   const dispatch = useDispatch();
+  const [isDark, { toggle }] = useDarkreader(false);
   const {
     signIn, signUp, editPost, editComment, resetPswd,
   } = useSelector((state) => state.modal);
@@ -71,6 +73,7 @@ const App = () => {
   return (
     <Router>
       <NavBar />
+      <Switch checked={isDark} onChange={toggle} styling="docusaurus" />
       <Container>
         <Row>
           <Col md={2} className="ColSideBar">
