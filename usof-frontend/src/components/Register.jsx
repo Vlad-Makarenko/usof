@@ -30,7 +30,6 @@ export const Register = () => {
     e.preventDefault();
     if (!form.login.length || !form.email.length || !form.password.length) {
       message('All fields must be filled', 'error');
-      console.log('all fields must be filled');
     } else {
       dispatch(signUp(form));
     }

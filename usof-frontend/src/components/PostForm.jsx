@@ -55,7 +55,6 @@ export const PostForm = ({ isEditing }) => {
     dispatch(getAllTags());
     if (isEditing) {
       const tempCategories = post.categories.map((tag) => ({ value: tag.title, lable: tag.title }));
-      console.log(tempCategories);
       setDefaultVal(tempCategories);
       setPostForm({
         title: post.title,

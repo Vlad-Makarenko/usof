@@ -24,7 +24,7 @@ export const signIn = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.post(`${API_URL}/auth/login`, payload);
-      console.table({ ...response.data });
+      // console.table({ ...response.data });
       localStorage.setItem('token', response.data.accessToken);
       return response.data;
     } catch (error) {
@@ -50,7 +50,7 @@ export const resetPswd = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.post(`${API_URL}/auth/password-reset`, payload);
-      console.table({ ...response.data });
+      // console.table({ ...response.data });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -63,7 +63,7 @@ export const signUp = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.post(`${API_URL}/auth/register`, payload);
-      console.table({ ...response.data });
+      // console.table({ ...response.data });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

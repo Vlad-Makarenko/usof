@@ -9,8 +9,6 @@ export const getAllUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(`${API_URL}/users`);
-      console.log('Loading', Date.now());
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

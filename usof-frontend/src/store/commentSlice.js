@@ -28,7 +28,6 @@ export const getComment = createAsyncThunk(
       const response = await api.get(`${API_URL}/comments/${id}`);
       return response.data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error.response.data);
     }
   },
