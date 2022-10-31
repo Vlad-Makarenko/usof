@@ -244,12 +244,28 @@ const getFavorites = async (
           'createdAt',
           [
             sequelize.literal(`(
-              SELECT COUNT(like.id)
-              FROM \`like\`
-              WHERE like.PostId = post.id
-              AND like.type = 'like'
-            )`),
+					SELECT COUNT(like.id)
+					FROM \`like\`
+					WHERE like.PostId = post.id
+          AND like.type = 'like'
+				)`),
             'likeCount',
+          ],
+          [
+            sequelize.literal(`(
+          SELECT COUNT(comment.id)
+          FROM comment
+          WHERE comment.PostId = post.id
+        )`),
+            'answerCount',
+          ],
+          [
+            sequelize.literal(`(
+					SELECT COUNT(favorite.id)
+					FROM \`favorite\`
+					WHERE favorite.PostId = post.id
+				)`),
+            'favoriteCount',
           ],
         ],
         include: [
@@ -258,37 +274,42 @@ const getFavorites = async (
             through: {
               attributes: [],
             },
-            where: {
-              ...(categoriesStr
-                ? { id: { [sequelize.Op.in]: categories } }
-                : {}),
-            },
+            ...(categoriesStr
+              ? { where: { id: { [sequelize.Op.in]: categories } } }
+              : {}),
             as: 'categories',
           },
           {
             model: User,
             as: 'author',
-            attributes: ['id', 'login', 'full_name', 'profile_picture', 'rating'],
+            attributes: [
+              'id',
+              'login',
+              'full_name',
+              'profile_picture',
+              'rating',
+            ],
           },
         ],
       },
     ],
-    offset,
-    limit,
+    ...(page > 0 ? { offset } : {}),
+    ...(page > 0 ? { limit } : {}),
     subQuery: false,
-    group: ['Post.id'],
+    ...(page > 0 ? { group: ['Post.id'] } : {}),
     order: [[oreder, direction]],
   });
   if (!allPosts) {
     throw ApiError.NothingFoundError();
   }
+
   const { count: totalPosts, rows: posts } = allPosts;
   return {
     totalPosts: totalPosts.length,
     currentPage: Number(page),
     totalPages: Math.ceil(totalPosts.length / limit),
     posts: posts.map((post) => {
-      return { ...post.dataValues, likeCount: undefined };
+      return { ...post.dataValues.Post.dataValues };
     }),
   };
 };
