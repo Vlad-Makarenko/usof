@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PswdInput } from './PswdInput';
 import { SignInOn, SignUpOff } from '../store/modalSlice';
 import { useMessage } from '../hooks/message.hook';
-import { clearError, signUp } from '../store/authSlice';
+import { signUp } from '../store/authSlice';
 import faq from '../assets/background.png';
 import '../styles/Auth.css';
 
@@ -24,7 +24,7 @@ export const Register = () => {
     repeatedPassword: '',
     full_name: '',
   });
-  const { isLoading, error, isAuthenticated, success } = useSelector((state) => state.auth);
+  const { isLoading, isAuthenticated, success } = useSelector((state) => state.auth);
 
   const signUpHandler = (e) => {
     e.preventDefault();
@@ -40,13 +40,6 @@ export const Register = () => {
       dispatch(SignUpOff());
     }
   }, [isAuthenticated, success]);
-
-  useEffect(() => {
-    if (error) {
-      message(error, 'error');
-      dispatch(clearError());
-    }
-  }, [error]);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });

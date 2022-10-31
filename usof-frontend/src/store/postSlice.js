@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
 import { API_URL, DEFAUL_FILTERS } from '../utils/constants';
 import { countTotalPages, filterPosts as filterPostsUtils, getCurentPosts } from '../utils/postsUtils';
+import { errorHandler } from '../utils/errorHandler';
 
 export const getAllPosts = createAsyncThunk(
   'post/getAllPosts',
@@ -145,12 +146,6 @@ export const removeFromFavorite = createAsyncThunk(
   },
 );
 
-const setError = (state, action) => {
-  state.isLoading = false;
-  state.error = action.payload.message;
-  console.log('req error: ', action.payload);
-};
-
 const postSlice = createSlice({
   name: 'post',
   initialState: {
@@ -165,9 +160,6 @@ const postSlice = createSlice({
     isLoading: false,
   },
   reducers: {
-    clearError(state) {
-      state.error = null;
-    },
     updateFilters(state, action) {
       state.filters = action.payload.filters;
     },
@@ -197,15 +189,12 @@ const postSlice = createSlice({
   extraReducers: {
     [getAllPosts.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [getAllUserPosts.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [getFavoritePosts.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [getPost.pending]: (state) => {
       state.isLoading = true;
@@ -213,7 +202,6 @@ const postSlice = createSlice({
     },
     [createPost.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [getAllPosts.fulfilled]: (state, action) => {
       state.allPosts = action.payload.posts;
@@ -271,16 +259,20 @@ const postSlice = createSlice({
     [removeFromFavorite.fulfilled]: (state) => {
       state.post.favoriteCount -= 1;
     },
-    [getAllPosts.rejected]: setError,
-    [getAllUserPosts.rejected]: setError,
-    [getFavoritePosts.rejected]: setError,
-    [getPost.rejected]: setError,
-    [createPost.rejected]: setError,
-    [ceateLike.rejected]: setError,
-    [deleteLike.rejected]: setError,
-    [addToFavorite.rejected]: setError,
-    [removeFromFavorite.rejected]: setError,
-    [updatePost.rejected]: setError,
+    [getAllPosts.rejected]: errorHandler,
+    [getAllUserPosts.rejected]: errorHandler,
+    [getFavoritePosts.rejected]: errorHandler,
+    [getPost.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.message;
+      console.log('req error: ', action.payload);
+    },
+    [createPost.rejected]: errorHandler,
+    [ceateLike.rejected]: errorHandler,
+    [deleteLike.rejected]: errorHandler,
+    [addToFavorite.rejected]: errorHandler,
+    [removeFromFavorite.rejected]: errorHandler,
+    [updatePost.rejected]: errorHandler,
   },
 });
 

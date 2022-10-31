@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import api from '../http';
 import { API_URL } from '../utils/constants';
+import { errorHandler } from '../utils/errorHandler';
 
 export const checkAuth = createAsyncThunk(
   'auth/checkAuth',
@@ -84,12 +85,6 @@ export const logOut = createAsyncThunk(
   },
 );
 
-const setError = (state, action) => {
-  state.isLoading = false;
-  state.error = action.payload.message;
-  console.log('req error: ', action.payload);
-};
-
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -103,15 +98,10 @@ const authSlice = createSlice({
       createdAt: Date.now(),
     },
     isAuthenticated: false,
-    error: null,
     isLoading: false,
     success: false,
   },
-  reducers: {
-    clearError(state) {
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: {
     [signIn.pending]: (state) => {
       state.isLoading = true;
@@ -162,18 +152,16 @@ const authSlice = createSlice({
       state.me = {};
       state.isAuthenticated = false;
     },
-    [signIn.rejected]: setError,
-    [signUp.rejected]: setError,
-    [logOut.rejected]: setError,
-    [resetPassword.rejected]: setError,
-    [resetPswd.rejected]: setError,
+    [signIn.rejected]: errorHandler,
+    [signUp.rejected]: errorHandler,
+    [logOut.rejected]: errorHandler,
+    [resetPassword.rejected]: errorHandler,
+    [resetPswd.rejected]: errorHandler,
     [checkAuth.rejected]: (state, action) => {
       state.isLoading = false;
       console.log('req error: ', action.payload);
     },
   },
 });
-
-export const { clearError } = authSlice.actions;
 
 export default authSlice.reducer;

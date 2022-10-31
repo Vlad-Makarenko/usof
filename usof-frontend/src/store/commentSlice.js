@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
 import { API_URL } from '../utils/constants';
+import { errorHandler } from '../utils/errorHandler';
 
 export const getAllComments = createAsyncThunk(
   'comment/getAllComments',
@@ -93,24 +94,14 @@ export const deleteCommentLike = createAsyncThunk(
   },
 );
 
-const setError = (state, action) => {
-  state.isLoading = false;
-  state.error = action.payload.message;
-  console.log('req error: ', action.payload);
-};
-
 const commentSlice = createSlice({
   name: 'comment',
   initialState: {
     allComments: [],
     comment: {},
-    error: null,
     isLoading: false,
   },
   reducers: {
-    clearError(state) {
-      state.error = null;
-    },
     setComment(state, action) {
       state.comment = action.payload;
     },
@@ -118,11 +109,9 @@ const commentSlice = createSlice({
   extraReducers: {
     [getAllComments.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [getComment.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [getAllComments.fulfilled]: (state, action) => {
       state.allComments = action.payload;
@@ -163,15 +152,15 @@ const commentSlice = createSlice({
     [ceateComment.fulfilled]: (state, action) => {
       state.allComments.push(action.payload);
     },
-    [getAllComments.rejected]: setError,
-    [getComment.rejected]: setError,
-    [createCommentLike.rejected]: setError,
-    [deleteCommentLike.rejected]: setError,
-    [ceateComment.rejected]: setError,
-    [updateComment.rejected]: setError,
+    [getAllComments.rejected]: errorHandler,
+    [getComment.rejected]: errorHandler,
+    [createCommentLike.rejected]: errorHandler,
+    [deleteCommentLike.rejected]: errorHandler,
+    [ceateComment.rejected]: errorHandler,
+    [updateComment.rejected]: errorHandler,
   },
 });
 
-export const { clearError, setComment } = commentSlice.actions;
+export const { setComment } = commentSlice.actions;
 
 export default commentSlice.reducer;

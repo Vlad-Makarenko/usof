@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../http';
 import { API_URL } from '../utils/constants';
+import { errorHandler } from '../utils/errorHandler';
 
 export const getAllTags = createAsyncThunk(
   'tag/getAllTags',
@@ -28,12 +29,6 @@ export const getTag = createAsyncThunk(
   },
 );
 
-const setError = (state, action) => {
-  state.isLoading = false;
-  state.error = action.payload.message;
-  console.log('req error: ', action.payload);
-};
-
 const initialTag = {
   id: 0,
   title: 'Tags',
@@ -47,7 +42,6 @@ const tagSlice = createSlice({
     tags: [],
     tag: initialTag,
     isLoading: false,
-    error: null,
   },
   reducers: {
     setDefaulTag(state) {
@@ -57,22 +51,16 @@ const tagSlice = createSlice({
   extraReducers: {
     [getAllTags.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [getAllTags.fulfilled]: (state, action) => {
       state.tags = action.payload;
       state.isLoading = false;
     },
-    [getAllTags.rejected]: setError,
-    [getTag.pending]: (state) => {
-      // state.isLoading = true;
-      state.error = null;
-    },
     [getTag.fulfilled]: (state, action) => {
       state.tag = action.payload;
-      // state.isLoading = false;
     },
-    [getTag.rejected]: setError,
+    [getTag.rejected]: errorHandler,
+    [getAllTags.rejected]: errorHandler,
   },
 });
 

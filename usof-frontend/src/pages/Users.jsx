@@ -125,20 +125,4 @@ export const Users = () => {
       </Row>
     </Container>
   );
-
-  // return (
-  //   <div>
-  //     {users.map((user) => (
-  //       <div key={user.id}>
-  //         <p>{user.id}</p>
-  //         <p>{user.login}</p>
-  //         <p>{user.full_name}</p>
-  //         <p>{user.profile_picture}</p>
-  //         <p>{user.rating}</p>
-  //         <p>{user.role}</p>
-  //         <p>{user.createdAt}</p>
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
 };

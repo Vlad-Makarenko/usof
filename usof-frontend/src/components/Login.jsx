@@ -11,7 +11,7 @@ import { PswdInput } from './PswdInput';
 import faq from '../assets/auth.png';
 import { ResetPswdOn, SignInOff, SignUpOn } from '../store/modalSlice';
 import { useMessage } from '../hooks/message.hook';
-import { clearError, signIn } from '../store/authSlice';
+import { signIn } from '../store/authSlice';
 import '../styles/Auth.css';
 
 export const Login = () => {
@@ -22,7 +22,7 @@ export const Login = () => {
     email: '',
     password: '',
   });
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { isLoading, isAuthenticated } = useSelector((state) => state.auth);
 
   const signInHandler = (e) => {
     e.preventDefault();
@@ -38,13 +38,6 @@ export const Login = () => {
       dispatch(SignInOff());
     }
   }, [isAuthenticated]);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     message(error, 'error');
-  //     dispatch(clearError());
-  //   }
-  // }, [error]);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
