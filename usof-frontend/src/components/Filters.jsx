@@ -48,7 +48,7 @@ export const Filters = ({ localFilter, setLocalFilter, isUser }) => {
       dispatch(getAllPosts());
       dispatch(getAllTags());
     }
-  }, []);
+  }, [isUser]);
 
   return (
     <Row>

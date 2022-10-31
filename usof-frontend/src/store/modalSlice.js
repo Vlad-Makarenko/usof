@@ -40,6 +40,12 @@ const modalSlice = createSlice({
     ResetPswdOff(state) {
       state.resetPswd = false;
     },
+    ProfileEditOn(state) {
+      state.profileEdit = true;
+    },
+    ProfileEditOff(state) {
+      state.profileEdit = false;
+    },
   },
 });
 
@@ -54,6 +60,8 @@ export const {
   EditCommentOff,
   ResetPswdOn,
   ResetPswdOff,
+  ProfileEditOn,
+  ProfileEditOff,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

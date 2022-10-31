@@ -71,12 +71,15 @@ export const PostCard = ({ post }) => {
             >
               {post.title}
             </h5>
-            <div>
-              <span>
+            <div className="w-100">
+              <p style={{
+                wordWrap: 'break-word', maxWidth: '100%',
+              }}
+              >
                 {post.content.length > 100
                   ? `${post.content.slice(0, 100)}...`
                   : post.content}
-              </span>
+              </p>
             </div>
           </div>
         </Col>

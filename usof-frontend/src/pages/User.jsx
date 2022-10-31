@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
+  Button,
   Col,
   Container,
   Row,
@@ -14,6 +15,7 @@ import {
   ChatTextFill,
   ClockFill,
   HandThumbsUpFill,
+  PenFill,
   PersonFill,
   PostcardFill,
 } from 'react-bootstrap-icons';
@@ -24,6 +26,7 @@ import { Filters } from '../components/Filters';
 import { AVATAR_URL, DEFAUL_FILTERS } from '../utils/constants';
 import { PostPagination } from '../components/PostPagination';
 import { PostCard } from '../components/PostCard';
+import { ProfileEditOn } from '../store/modalSlice';
 
 export const User = () => {
   const { id } = useParams();
@@ -37,11 +40,12 @@ export const User = () => {
   const { isLoading: postsLoading, currentPagePosts } = useSelector(
     (state) => state.post,
   );
+  const { me } = useSelector((state) => state.auth);
   const [localFilter, setLocalFilter] = useState(DEFAUL_FILTERS);
 
   useEffect(() => {
     dispatch(getUser({ id }));
-  }, []);
+  }, [id]);
 
   if (error) {
     return <Nothing />;
@@ -134,6 +138,22 @@ export const User = () => {
                   comments
                 </h6>
               </Col>
+              {(user.id === me.id || me.role === 'admin') && (
+              <Col
+                md={12}
+                className="d-flex align-items-center justify-content-center mt-2"
+              >
+                <Button
+                  variant="outline-warning"
+                  className="d-flex align-items-center justify-content-center pt-1 pb-1"
+                  onClick={() => dispatch(ProfileEditOn())}
+                >
+                  <PenFill color="orange" className="me-2" />
+                  <h6 className="mt-1">Edit profile</h6>
+                </Button>
+
+              </Col>
+              )}
             </Row>
           )}
         </Col>

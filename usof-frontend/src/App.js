@@ -3,25 +3,16 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-import { Switch, useDarkreader } from 'react-darkreader';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import { useRoutes } from './hooks/routes.hook';
 import { NavBar } from './components/NavBar';
-import { ModalWin } from './components/ModalWin';
-import {
-  EditCommentOff, EditPostOff, ResetPswdOff, SignInOff, SignUpOff,
-} from './store/modalSlice';
 
 import './App.css';
-import { Login } from './components/Login';
 import { useMessage } from './hooks/message.hook';
 import { checkAuth } from './store/authSlice';
 import { LeftSideBar } from './components/LeftSideBar';
-import { PostForm } from './components/PostForm';
-import { Answer } from './components/Answer';
-import { Register } from './components/Register';
-import { ResetPswd } from './components/ResetPswd';
+import { useModal } from './hooks/modal.hook';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,11 +26,8 @@ function ScrollToTop() {
 
 const App = () => {
   const routes = useRoutes();
+  const modals = useModal();
   const dispatch = useDispatch();
-  const [isDark, { toggle }] = useDarkreader(false);
-  const {
-    signIn, signUp, editPost, editComment, resetPswd,
-  } = useSelector((state) => state.modal);
   const { error: postErr } = useSelector((state) => state.post);
   const { error: tagErr } = useSelector((state) => state.tag);
   const { error: authErr } = useSelector((state) => state.auth);
@@ -73,7 +61,6 @@ const App = () => {
   return (
     <Router>
       <NavBar />
-      <Switch checked={isDark} onChange={toggle} styling="docusaurus" />
       <Container>
         <Row>
           <Col md={2} className="ColSideBar">
@@ -88,21 +75,7 @@ const App = () => {
       </Container>
       <ScrollToTop />
       <ToastContainer />
-      <ModalWin show={signIn} onHide={() => dispatch(SignInOff())}>
-        <Login />
-      </ModalWin>
-      <ModalWin show={signUp} onHide={() => dispatch(SignUpOff())}>
-        <Register />
-      </ModalWin>
-      <ModalWin show={resetPswd} onHide={() => dispatch(ResetPswdOff())}>
-        <ResetPswd />
-      </ModalWin>
-      <ModalWin show={editPost} onHide={() => dispatch(EditPostOff())}>
-        <PostForm isEditing />
-      </ModalWin>
-      <ModalWin show={editComment} onHide={() => dispatch(EditCommentOff())}>
-        <Answer isEditing />
-      </ModalWin>
+      {modals}
     </Router>
   );
 };

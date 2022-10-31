@@ -40,12 +40,12 @@ export const Login = () => {
     }
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    if (error) {
-      message(error, 'error');
-      dispatch(clearError());
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     message(error, 'error');
+  //     dispatch(clearError());
+  //   }
+  // }, [error]);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -140,7 +140,7 @@ export const Login = () => {
           </form>
         </Col>
         <Col
-          md={{ span: 5, offset: 1 }}
+          md={6}
           className="d-flex justify-content-center align-items-center"
         >
           <img src={faq} width="100%" alt="aurh" />
