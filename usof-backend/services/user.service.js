@@ -44,6 +44,7 @@ const getUser = async (id) => {
     attributes: [
       'id',
       'login',
+      'email',
       'full_name',
       'profile_picture',
       'rating',
@@ -167,24 +168,25 @@ const deleteAvatar = async (userId) => {
  * @returns User
  */
 const updateUser = async (owner, data, id) => {
-  if (data.email) {
+  const user = await User.findOne({ where: { id } });
+  if (data.email && user.email !== data.email) {
     const candidate = await User.findOne({ where: { email: data.email } });
     if (candidate) {
       throw ApiError.BadRequestError(
-        `User with email ${email} is already registered`,
+        `User with email ${data.email} is already registered`,
       );
     }
   }
-  if (data.login) {
+  if (data.login  && data.login !== user.login) {
     const candidate = await User.findOne({ where: { login: data.login } });
     if (candidate) {
       throw ApiError.BadRequestError(
-        `User with login ${login} is already registered`,
+        `User with login ${data.login} is already registered`,
       );
     }
   }
-  const user = await User.findOne({ where: { id } });
-  if (data.email) {
+  // const user = await User.findOne({ where: { id } });
+  if (data.email && data.email !== user.email) {
     user.email = data.email;
     await mailService.sendActivationMail(data.email);
   }

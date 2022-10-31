@@ -64,6 +64,10 @@ const deleteAvatar = async (req, res, next) => {
 
 const userUpdate = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequestError('validation error', errors.array()));
+    }
     const owner = req.user.id == req.params.user_id;
     if (owner || req.user.role === 'admin') {
       const user = await userService.updateUser(

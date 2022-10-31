@@ -24,7 +24,14 @@ router.patch(
   fileMdw.single('avatar'),
   usersController.avatarUpdate,
 );
-router.patch('/:user_id', authMdw, usersController.userUpdate);
+router.patch(
+  '/:user_id',
+  body('email').trim().isEmail(),
+  body('login').trim().isLength({ min: 3, max: 30 }),
+  body('full_name').trim().isLength({ min: 3, max: 30 }),
+  authMdw,
+  usersController.userUpdate,
+);
 router.delete('/avatar', authMdw, usersController.deleteAvatar);
 router.delete('/:user_id', authMdw, adminMdw, usersController.userDelete);
 
