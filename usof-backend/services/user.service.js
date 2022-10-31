@@ -1,4 +1,5 @@
 const fs = require('fs');
+const sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
 const db = require('../db/sequelize');
 const ApiError = require('../utils/ApiError');
@@ -6,6 +7,8 @@ const userData = require('../utils/userDto');
 const mailService = require('./mail.service');
 
 const { User } = db.sequelize.models;
+const { Post } = db.sequelize.models;
+const { Comment } = db.sequelize.models;
 
 /**
  *
@@ -46,6 +49,22 @@ const getUser = async (id) => {
       'rating',
       'role',
       'createdAt',
+      [
+        sequelize.literal(`(
+          SELECT COUNT(post.id)
+          FROM \`post\`
+          WHERE post.UserId = user.id
+        )`),
+        'postsCount',
+      ],
+      [
+        sequelize.literal(`(
+          SELECT COUNT(comment.id)
+          FROM \`comment\`
+          WHERE comment.UserId = user.id
+        )`),
+        'commentsCount',
+      ],
     ],
   });
   if (!user) {
