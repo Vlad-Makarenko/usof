@@ -18,6 +18,20 @@ export const getAllPosts = createAsyncThunk(
   },
 );
 
+export const getAllUserPosts = createAsyncThunk(
+  'post/getAllPosts',
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`${API_URL}/posts/?page=-1&user=${id}`);
+      // console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 export const getPost = createAsyncThunk(
   'post/getPost',
   async ({ id }, { rejectWithValue }) => {
@@ -175,6 +189,10 @@ const postSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
+    [getAllUserPosts.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
     [getPost.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
@@ -184,6 +202,14 @@ const postSlice = createSlice({
       state.error = null;
     },
     [getAllPosts.fulfilled]: (state, action) => {
+      state.allPosts = action.payload.posts;
+      const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
+      state.filteredPosts = filteredPosts;
+      state.totalPages = countTotalPages(action.payload.posts);
+      state.currentPagePosts = getCurentPosts(filteredPosts, 1);
+      state.isLoading = false;
+    },
+    [getAllUserPosts.fulfilled]: (state, action) => {
       state.allPosts = action.payload.posts;
       const filteredPosts = filterPostsUtils(action.payload.posts, DEFAUL_FILTERS);
       state.filteredPosts = filteredPosts;
@@ -224,6 +250,7 @@ const postSlice = createSlice({
       state.post.favoriteCount -= 1;
     },
     [getAllPosts.rejected]: setError,
+    [getAllUserPosts.rejected]: setError,
     [getPost.rejected]: setError,
     [createPost.rejected]: setError,
     [ceateLike.rejected]: setError,

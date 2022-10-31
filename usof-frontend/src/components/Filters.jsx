@@ -11,12 +11,12 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { ArrowDown, ArrowRepeat, ArrowUp } from 'react-bootstrap-icons';
-import { filterPosts, getAllPosts } from '../store/postSlice';
+import { filterPosts, getAllPosts, getAllUserPosts } from '../store/postSlice';
 import { SrchInput } from './SrchInput';
 import { DATE_RADIOS, DEFAUL_FILTERS, SORT_RADIOS } from '../utils/constants';
 import { getAllTags } from '../store/tagSlice';
 
-export const Filters = ({ localFilter, setLocalFilter }) => {
+export const Filters = ({ localFilter, setLocalFilter, isUser }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { allPosts } = useSelector((state) => state.post);
@@ -41,8 +41,12 @@ export const Filters = ({ localFilter, setLocalFilter }) => {
   }, [localFilter]);
 
   useEffect(() => {
-    dispatch(getAllPosts());
-    dispatch(getAllTags());
+    if (isUser) {
+      dispatch(getAllUserPosts({ id: isUser }));
+    } else {
+      dispatch(getAllPosts());
+      dispatch(getAllTags());
+    }
   }, []);
 
   return (

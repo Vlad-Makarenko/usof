@@ -56,8 +56,9 @@ export const NavBar = () => {
                 </div>
                 <div>
                   <img
-                    className="NavAva"
+                    className="NavAva ms-2"
                     src={`${SERVER_URL}/avatars/${me.avatar}`}
+                    height="45px"
                     alt="ava"
                   />
                 </div>

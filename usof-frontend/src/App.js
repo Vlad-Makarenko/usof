@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
@@ -21,6 +21,16 @@ import { PostForm } from './components/PostForm';
 import { Answer } from './components/Answer';
 import { Register } from './components/Register';
 import { ResetPswd } from './components/ResetPswd';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 const App = () => {
   const routes = useRoutes();
@@ -73,6 +83,7 @@ const App = () => {
           </Col>
         </Row>
       </Container>
+      <ScrollToTop />
       <ToastContainer />
       <ModalWin show={signIn} onHide={() => dispatch(SignInOff())}>
         <Login />

@@ -9,13 +9,8 @@ export const Users = () => {
     dispatch(getAllUsers());
   }, []);
   const { users } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.loading);
   return (
     <div>
-      <h1>
-        {'Users: '}
-        {isLoading ? 'LOADING' : 'NOT'}
-      </h1>
       {users.map((user) => (
         <div key={user.id}>
           <p>{user.id}</p>

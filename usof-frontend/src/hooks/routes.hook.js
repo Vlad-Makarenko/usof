@@ -5,7 +5,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ResetPassword } from '../pages/ResetPassword';
 import { Tags } from '../pages/Tags';
 import { Main } from '../pages/Main';
-import { Profile } from '../pages/Profile';
 import { User } from '../pages/User';
 import { Users } from '../pages/Users';
 import { Post } from '../pages/Post';
