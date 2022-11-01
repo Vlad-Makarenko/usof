@@ -134,7 +134,11 @@ const updateAvatar = async (fileName, userId) => {
     throw ApiError.BadRequestError('No such user');
   }
   if (user.profile_picture !== 'default.png') {
-    fs.unlinkSync(`./static/avatars/${user.profile_picture}`);
+    try {
+      fs.unlinkSync(`./static/avatars/${user.profile_picture}`);
+    } catch (e) {
+      console.log(e.message);
+    }
   }
   user.profile_picture = fileName;
   await user.save();
@@ -177,7 +181,7 @@ const updateUser = async (owner, data, id) => {
       );
     }
   }
-  if (data.login  && data.login !== user.login) {
+  if (data.login && data.login !== user.login) {
     const candidate = await User.findOne({ where: { login: data.login } });
     if (candidate) {
       throw ApiError.BadRequestError(

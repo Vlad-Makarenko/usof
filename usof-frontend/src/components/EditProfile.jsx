@@ -25,7 +25,7 @@ export const EditProfile = () => {
     dispatch(editProfile({ ...form, id: user.id }));
   };
 
-  const avatarHandler = (e) => {
+  const avatarHandler = () => {
     if (avatar) {
       dispatch(updateAvatar({ avatar }));
     }
