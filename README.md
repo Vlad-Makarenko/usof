@@ -7,10 +7,10 @@
 [![MYSQL](https://img.shields.io/static/v1?label=mysql&message=8.0.10&color=blueviolet)](https://shields.io/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://shields.io/)
 
-### [🌐 Website](https://useof.netlify.app/)  |  [📹 Demo Video]()
+### [🌐 Website](https://stack-overclone.netlify.app/)  |  [📹 Demo Video]()
 
 ### API Hosted On
-- __[stackoverclone.herokuapp]() (Primary)__
+- __[stackoverclone.herokuapp](https://usof-stackoverclone.herokuapp.com/) (Primary)__
 
 This project is a Q/A website for professional and enthusiast programmers built solely by me.
 
