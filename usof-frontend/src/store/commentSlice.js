@@ -126,6 +126,10 @@ const commentSlice = createSlice({
       const idx = state.allComments.findIndex(((obj) => obj.comment.id === Number(id)));
       state.allComments[idx].comment = action.payload;
     },
+    [deleteComment.fulfilled]: (state, action) => {
+      const id = action.payload;
+      state.allComments = state.allComments.filter(((obj) => obj.comment.id !== Number(id)));
+    },
     [createCommentLike.fulfilled]: (state, action) => {
       const { CommentId } = action.payload;
       const idx = state.allComments.findIndex(((obj) => obj.comment.id === Number(CommentId)));

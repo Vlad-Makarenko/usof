@@ -95,7 +95,7 @@ export const LeftSideBar = () => {
     <Container fluid style={{ padding: '0' }}>
       {sideCategories.map((category, idx) => {
         if (category.to === '/saved' && !isAuthenticated) {
-          return <div />;
+          return <div key={category.to} />;
         }
         return (
           <div
