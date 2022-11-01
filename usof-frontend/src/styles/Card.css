@@ -1,6 +1,8 @@
 .TagCard {
-  width: 20%;
-  margin: 1%;
+  /* width: fit-content; */
+  /* min-width: 220px; */
+  width: 220px;
+  margin: 20px;
   cursor: pointer;
   transition: all 0.1s ease;
   animation: cardAppear 1s forwards;

@@ -11,15 +11,20 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { ArrowDown, ArrowRepeat, ArrowUp } from 'react-bootstrap-icons';
-import { filterPosts, getAllPosts, getAllUserPosts } from '../store/postSlice';
+import {
+  filterPosts, getAllPosts, getAllUserPosts, getFavoritePosts,
+} from '../store/postSlice';
 import { SrchInput } from './SrchInput';
 import { DATE_RADIOS, DEFAUL_FILTERS, SORT_RADIOS } from '../utils/constants';
 import { getAllTags } from '../store/tagSlice';
 
-export const Filters = ({ localFilter, setLocalFilter, isUser }) => {
+export const Filters = ({
+  localFilter, setLocalFilter, isUser, isSaved,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { allPosts } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.user);
 
   const [info, setInfo] = useState('New');
 
@@ -43,11 +48,13 @@ export const Filters = ({ localFilter, setLocalFilter, isUser }) => {
   useEffect(() => {
     if (isUser) {
       dispatch(getAllUserPosts({ id: isUser }));
+    } else if (isSaved) {
+      dispatch(getFavoritePosts());
     } else {
       dispatch(getAllPosts());
       dispatch(getAllTags());
     }
-  }, []);
+  }, [isUser, isSaved]);
 
   return (
     <Row>
@@ -56,9 +63,7 @@ export const Filters = ({ localFilter, setLocalFilter, isUser }) => {
         className="d-flex align-items-center justify-content-between mb-4"
       >
         <h2>
-          {info}
-          {' '}
-          Questions
+          {isUser ? `${user.login}\`s Questions` : `${info} Questions` }
         </h2>
         <Button variant="outline-dark" onClick={() => { navigate('/ask'); }}>Ask Question</Button>
       </Col>

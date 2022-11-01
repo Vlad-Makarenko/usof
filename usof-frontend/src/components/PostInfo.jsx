@@ -260,7 +260,12 @@ export const PostInfo = () => {
               </div>
             )}
           </div>
-          <p style={{ whiteSpace: 'pre' }}>{post.content}</p>
+          <p style={{
+            whiteSpace: 'pre-line', wordWrap: 'break-word', maxWidth: '100%',
+          }}
+          >
+            {post.content}
+          </p>
         </Container>
       </Col>
       <Col

@@ -4,11 +4,18 @@
 import React, { useState, useEffect } from 'react';
 
 import { Container } from 'react-bootstrap';
-import { PeopleFill, Stack, TagsFill } from 'react-bootstrap-icons';
+import {
+  BookmarkCheckFill,
+  PeopleFill,
+  Stack,
+  TagsFill,
+} from 'react-bootstrap-icons';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/SideBar.css';
 
 export const LeftSideBar = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [sideCategories, setSideCategories] = useState([
     {
       to: '/',
@@ -25,6 +32,11 @@ export const LeftSideBar = () => {
       title: 'Users',
       isActive: false,
     },
+    {
+      to: '/saved',
+      title: 'Saved posts',
+      isActive: false,
+    },
   ]);
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,6 +49,7 @@ export const LeftSideBar = () => {
           (sideCategories[0].isActive = true),
           (sideCategories[1].isActive = false),
           (sideCategories[2].isActive = false),
+          (sideCategories[3].isActive = false),
         ]);
         break;
       case '/tags':
@@ -45,12 +58,23 @@ export const LeftSideBar = () => {
           (sideCategories[1].isActive = true),
           (sideCategories[0].isActive = false),
           (sideCategories[2].isActive = false),
+          (sideCategories[3].isActive = false),
         ]);
         break;
       case '/users':
         setSideCategories([
           ...sideCategories,
           (sideCategories[2].isActive = true),
+          (sideCategories[1].isActive = false),
+          (sideCategories[0].isActive = false),
+          (sideCategories[3].isActive = false),
+        ]);
+        break;
+      case '/saved':
+        setSideCategories([
+          ...sideCategories,
+          (sideCategories[3].isActive = true),
+          (sideCategories[2].isActive = false),
           (sideCategories[1].isActive = false),
           (sideCategories[0].isActive = false),
         ]);
@@ -61,6 +85,7 @@ export const LeftSideBar = () => {
           (sideCategories[0].isActive = false),
           (sideCategories[1].isActive = false),
           (sideCategories[2].isActive = false),
+          (sideCategories[3].isActive = false),
         ]);
         break;
     }
@@ -68,23 +93,29 @@ export const LeftSideBar = () => {
 
   return (
     <Container fluid style={{ padding: '0' }}>
-      {sideCategories.map((category, idx) => (
-        <div
+      {sideCategories.map((category, idx) => {
+        if (category.to === '/saved' && !isAuthenticated) {
+          return <div key={category.to} />;
+        }
+        return (
+          <div
           // eslint-disable-next-line react/no-array-index-key
-          key={idx}
-          className={
+            key={idx}
+            className={
             category.isActive
               ? 'activeSide categoryTitle d-flex align-items-center'
               : 'categoryTitle d-flex align-items-center'
           }
-          onClick={() => navigate(category.to)}
-        >
-          {category.to === '/' ? <Stack /> : <></>}
-          {category.to === '/tags' ? <TagsFill /> : <></>}
-          {category.to === '/users' ? <PeopleFill /> : <></>}
-          <span style={{ marginLeft: '5px' }}>{category.title}</span>
-        </div>
-      ))}
+            onClick={() => navigate(category.to)}
+          >
+            {category.to === '/' ? <Stack /> : <></>}
+            {category.to === '/tags' ? <TagsFill /> : <></>}
+            {category.to === '/users' ? <PeopleFill /> : <></>}
+            {category.to === '/saved' ? <BookmarkCheckFill /> : <></>}
+            <span style={{ marginLeft: '5px' }}>{category.title}</span>
+          </div>
+        );
+      })}
     </Container>
   );
 };

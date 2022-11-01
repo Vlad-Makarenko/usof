@@ -11,7 +11,7 @@ import { PswdInput } from './PswdInput';
 import faq from '../assets/auth.png';
 import { ResetPswdOn, SignInOff, SignUpOn } from '../store/modalSlice';
 import { useMessage } from '../hooks/message.hook';
-import { clearError, signIn } from '../store/authSlice';
+import { signIn } from '../store/authSlice';
 import '../styles/Auth.css';
 
 export const Login = () => {
@@ -22,13 +22,12 @@ export const Login = () => {
     email: '',
     password: '',
   });
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { isLoading, isAuthenticated } = useSelector((state) => state.auth);
 
   const signInHandler = (e) => {
     e.preventDefault();
     if (!form.login.length || !form.email.length || !form.password.length) {
       message('All fields must be filled', 'error');
-      console.log('all fields must be filled');
     } else {
       dispatch(signIn(form));
     }
@@ -39,13 +38,6 @@ export const Login = () => {
       dispatch(SignInOff());
     }
   }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (error) {
-      message(error, 'error');
-      dispatch(clearError());
-    }
-  }, [error]);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -140,7 +132,7 @@ export const Login = () => {
           </form>
         </Col>
         <Col
-          md={{ span: 5, offset: 1 }}
+          md={6}
           className="d-flex justify-content-center align-items-center"
         >
           <img src={faq} width="100%" alt="aurh" />

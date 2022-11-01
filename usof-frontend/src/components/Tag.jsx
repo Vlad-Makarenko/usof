@@ -8,7 +8,7 @@ export const Tag = ({ tag }) => {
   const dispath = useDispatch();
   return (
     <Card
-      style={{ width: '20%', margin: '1%' }}
+      style={{ margin: '1%' }}
       className="TagCard"
       onClick={() => dispath(getTag({ id: tag.id }))}
     >

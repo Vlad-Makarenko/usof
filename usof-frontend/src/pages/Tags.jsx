@@ -53,7 +53,7 @@ export const Tags = () => {
     setFilter('');
     const tempTags = [...tags];
     setDisplayedTags(
-      tempTags.filter((value) => value.title.includes(e.target.value)),
+      tempTags.filter((value) => value.title.toLowerCase().includes(e.target.value.toLowerCase())),
     );
   };
 
