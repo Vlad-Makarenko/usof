@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import decode from 'jwt-decode';
 import { toast } from 'react-toastify';
 import api from '../http';
 import { API_URL } from '../utils/constants';
@@ -101,7 +102,12 @@ const authSlice = createSlice({
     isLoading: false,
     success: false,
   },
-  reducers: {},
+  reducers: {
+    tokenAuth(state) {
+      state.me = decode(localStorage.getItem('token'));
+      state.isAuthenticated = true;
+    },
+  },
   extraReducers: {
     [signIn.pending]: (state) => {
       state.isLoading = true;
@@ -163,5 +169,7 @@ const authSlice = createSlice({
     },
   },
 });
+
+export const { tokenAuth } = authSlice.actions;
 
 export default authSlice.reducer;

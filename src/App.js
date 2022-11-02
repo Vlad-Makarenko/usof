@@ -1,17 +1,16 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-
 import {
-  Col, Container, Row, Spinner,
+  Col, Container, Row,
 } from 'react-bootstrap';
 import { useRoutes } from './hooks/routes.hook';
 import { NavBar } from './components/NavBar';
 
 import './App.css';
-import { checkAuth } from './store/authSlice';
+import { checkAuth, tokenAuth } from './store/authSlice';
 import { LeftSideBar } from './components/LeftSideBar';
 import { useModal } from './hooks/modal.hook';
 
@@ -29,17 +28,13 @@ const App = () => {
   const routes = useRoutes();
   const modals = useModal();
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
+      dispatch(tokenAuth());
       dispatch(checkAuth());
     }
   }, []);
-
-  if (isLoading) {
-    return <Spinner animation="border" variant="warning" />;
-  }
 
   return (
     <Router>
