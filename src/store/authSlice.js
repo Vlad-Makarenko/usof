@@ -77,8 +77,8 @@ export const logOut = createAsyncThunk(
   'auth/logOut',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.post(`${API_URL}/auth/logout`);
       localStorage.removeItem('token');
+      const response = await api.post(`${API_URL}/auth/logout`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
