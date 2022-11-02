@@ -7,7 +7,7 @@
 [![MYSQL](https://img.shields.io/static/v1?label=mysql&message=8.0.10&color=blueviolet)](https://shields.io/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://shields.io/)
 
-### [🌐 Website](https://stack-overclone.netlify.app/)  |  [📹 Demo Video](https://www.youtube.com/watch?v=g5TccIOSULI&t)
+### [🌐 Website](https://stack-overclone.netlify.app/)  |  [📹 Demo Video](https://www.youtube.com/watch?v=iPSsPlGmY_U)
 
 ### API Hosted On
 - __[stackoverclone.herokuapp](https://usof-stackoverclone.herokuapp.com/) (Primary)__
@@ -74,7 +74,7 @@ This repo consists of the Frontend and Backend code of the project.
 
 ## DEMO
 
-#### VIDEO - [Watch the video](https://www.youtube.com/watch?v=g5TccIOSULI&t)
+#### VIDEO - [Watch the video](https://www.youtube.com/watch?v=iPSsPlGmY_U)
 
 
 #### Main page
