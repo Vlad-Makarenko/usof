@@ -96,6 +96,10 @@ export const PostCard = ({ post }) => {
             >
               <img
                 src={`${AVATAR_URL}/${post.author.profile_picture}`}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = `${AVATAR_URL}/default.png`;
+                }}
                 height="35"
                 alt="avatar"
                 className="NavAva m-0"

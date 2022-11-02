@@ -75,6 +75,10 @@ export const NavBar = () => {
                   <img
                     className="NavAva ms-2"
                     src={`${SERVER_URL}/avatars/${me.avatar}`}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = `${AVATAR_URL}/default.png`;
+                    }}
                     height="45px"
                     alt="ava"
                   />

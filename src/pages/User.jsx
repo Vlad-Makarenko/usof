@@ -63,6 +63,10 @@ export const User = () => {
               >
                 <img
                   src={`${AVATAR_URL}/${user.profile_picture}`}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null; // prevents looping
+                    currentTarget.src = `${AVATAR_URL}/default.png`;
+                  }}
                   width="80%"
                   alt="avatar"
                   className="NavAva"
