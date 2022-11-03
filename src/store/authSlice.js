@@ -104,8 +104,14 @@ const authSlice = createSlice({
   },
   reducers: {
     tokenAuth(state) {
-      state.me = decode(localStorage.getItem('token'));
-      state.isAuthenticated = true;
+      const decodedToken = decode(localStorage.getItem('token'));
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        state.me = decodedToken;
+        state.isAuthenticated = true;
+      } else {
+        state.me = {};
+        state.isAuthenticated = false;
+      }
     },
   },
   extraReducers: {
