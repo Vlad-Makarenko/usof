@@ -5,6 +5,11 @@
   box-shadow: 1px 1px 10px rgba(142, 74, 2, 0.5);
 }
 
+.footerMain{
+  font-family: 'Lato', sans-serif;
+  box-shadow: 1px 1px 10px rgba(142, 74, 2, 0.5);
+}
+
 .NavProfile{
   border: 1px solid transparent;
   margin-right: 1px;

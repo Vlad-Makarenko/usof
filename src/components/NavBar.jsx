@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Switch, useDarkreader } from 'react-darkreader';
 
-import { SERVER_URL } from '../utils/constants';
+import { AVATAR_URL, SERVER_URL } from '../utils/constants';
 import '../styles/NavBar.css';
 import { SignInOn, SignUpOn } from '../store/modalSlice';
 import logo from '../assets/miniLogo.png';

@@ -13,6 +13,7 @@ import './App.css';
 import { checkAuth, tokenAuth } from './store/authSlice';
 import { LeftSideBar } from './components/LeftSideBar';
 import { useModal } from './hooks/modal.hook';
+import { Footer } from './components/Footer';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,15 +43,16 @@ const App = () => {
       <Container>
         <Row>
           <Col md={2} className="ColSideBar">
-            <div className="DivSideBar">
-              <LeftSideBar />
-            </div>
+            {/* <div className="DivSideBar"> */}
+            <LeftSideBar />
+            {/* </div> */}
           </Col>
           <Col md={10} id="page-content-wrapper">
             <div className="App">{routes}</div>
           </Col>
         </Row>
       </Container>
+      <Footer />
       <ScrollToTop />
       <ToastContainer />
       {modals}

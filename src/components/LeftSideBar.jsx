@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 
-import { Container } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import {
   BookmarkCheckFill,
   PeopleFill,
@@ -92,15 +92,16 @@ export const LeftSideBar = () => {
   }, [location.pathname]);
 
   return (
-    <Container fluid style={{ padding: '0' }}>
+    <Nav defaultActiveKey="/home" className="flex-column">
       {sideCategories.map((category, idx) => {
         if (category.to === '/saved' && !isAuthenticated) {
           return <div key={category.to} />;
         }
         return (
-          <div
+          <Nav.Item
           // eslint-disable-next-line react/no-array-index-key
             key={idx}
+            eventKey={category.to}
             className={
             category.isActive
               ? 'activeSide categoryTitle d-flex align-items-center'
@@ -113,9 +114,37 @@ export const LeftSideBar = () => {
             {category.to === '/users' ? <PeopleFill /> : <></>}
             {category.to === '/saved' ? <BookmarkCheckFill /> : <></>}
             <span style={{ marginLeft: '5px' }}>{category.title}</span>
-          </div>
+          </Nav.Item>
         );
       })}
-    </Container>
+    </Nav>
   );
+
+  // return (
+  //   <Container fluid style={{ padding: '0' }}>
+  //     {sideCategories.map((category, idx) => {
+  //       if (category.to === '/saved' && !isAuthenticated) {
+  //         return <div key={category.to} />;
+  //       }
+  //       return (
+  //         <div
+  //         // eslint-disable-next-line react/no-array-index-key
+  //           key={idx}
+  //           className={
+  //           category.isActive
+  //             ? 'activeSide categoryTitle d-flex align-items-center'
+  //             : 'categoryTitle d-flex align-items-center'
+  //         }
+  //           onClick={() => navigate(category.to)}
+  //         >
+  //           {category.to === '/' ? <Stack /> : <></>}
+  //           {category.to === '/tags' ? <TagsFill /> : <></>}
+  //           {category.to === '/users' ? <PeopleFill /> : <></>}
+  //           {category.to === '/saved' ? <BookmarkCheckFill /> : <></>}
+  //           <span style={{ marginLeft: '5px' }}>{category.title}</span>
+  //         </div>
+  //       );
+  //     })}
+  //   </Container>
+  // );
 };
