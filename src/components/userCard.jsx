@@ -22,7 +22,7 @@ export const UserCard = ({ user }) => {
         src={`${AVATAR_URL}/${user.profile_picture}`}
         onErrorCapture={({ currentTarget }) => {
           currentTarget.onerror = null; // prevents looping
-          currentTarget.src = `${AVATAR_URL}/default.png`;
+          currentTarget.src = `https://i.pravatar.cc/300?u=${user.login}`;
         }}
         className="NavAva ms-3"
       />

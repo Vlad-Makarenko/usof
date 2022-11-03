@@ -101,7 +101,6 @@ export const LeftSideBar = () => {
           <Nav.Item
           // eslint-disable-next-line react/no-array-index-key
             key={idx}
-            eventKey={category.to}
             className={
             category.isActive
               ? 'activeSide categoryTitle d-flex align-items-center'

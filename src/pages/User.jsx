@@ -65,7 +65,7 @@ export const User = () => {
                   src={`${AVATAR_URL}/${user.profile_picture}`}
                   onError={({ currentTarget }) => {
                     currentTarget.onerror = null; // prevents looping
-                    currentTarget.src = `${AVATAR_URL}/default.png`;
+                    currentTarget.src = `https://i.pravatar.cc/300?u=${user.login}`;
                   }}
                   width="80%"
                   alt="avatar"

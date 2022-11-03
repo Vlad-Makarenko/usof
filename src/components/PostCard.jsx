@@ -98,7 +98,7 @@ export const PostCard = ({ post }) => {
                 src={`${AVATAR_URL}/${post.author.profile_picture}`}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = `${AVATAR_URL}/default.png`;
+                  currentTarget.src = `https://i.pravatar.cc/300?u=${post.author?.login}`;
                 }}
                 height="35"
                 alt="avatar"

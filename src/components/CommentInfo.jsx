@@ -64,7 +64,7 @@ export const CommentInfo = ({ comment, commentVote }) => {
                 src={`${AVATAR_URL}/${comment.author?.profile_picture}`}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = `${AVATAR_URL}/default.png`;
+                  currentTarget.src = `https://i.pravatar.cc/300?u=${comment.author?.login}`;
                 }}
                 height="35"
                 alt="avatar"

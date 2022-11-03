@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Switch, useDarkreader } from 'react-darkreader';
 
-import { AVATAR_URL, SERVER_URL } from '../utils/constants';
+import { SERVER_URL } from '../utils/constants';
 import '../styles/NavBar.css';
 import { SignInOn, SignUpOn } from '../store/modalSlice';
 import logo from '../assets/miniLogo.png';
@@ -77,7 +77,7 @@ export const NavBar = () => {
                     src={`${SERVER_URL}/avatars/${me.avatar}`}
                     onError={({ currentTarget }) => {
                       currentTarget.onerror = null; // prevents looping
-                      currentTarget.src = `${AVATAR_URL}/default.png`;
+                      currentTarget.src = `https://i.pravatar.cc/300?u=${me.login}`;
                     }}
                     height="45px"
                     alt="ava"
