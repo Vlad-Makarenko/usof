@@ -128,7 +128,12 @@ export const CommentInfo = ({ comment, commentVote }) => {
         style={{ borderLeft: '1px solid rgba(0, 0, 0, 0.2)' }}
       >
         <Container fluid className="mt-2">
-          <p>{comment.content}</p>
+          <p style={{
+            whiteSpace: 'pre-line', wordWrap: 'break-word', maxWidth: '100%',
+          }}
+          >
+            {comment.content}
+          </p>
         </Container>
         <Container
           className="d-flex justify-content-between"
