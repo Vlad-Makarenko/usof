@@ -46,7 +46,7 @@ export const Footer = () => {
               className="me-2"
               rel="noreferrer"
             >
-              <Telegram color="black" />
+              <Telegram color="black" size={25} />
             </a>
             <a
               href="https://www.instagram.com/_vlad_makarenko_"
@@ -54,7 +54,7 @@ export const Footer = () => {
               className="ms-2 me-2"
               rel="noreferrer"
             >
-              <Instagram color="black" />
+              <Instagram color="black" size={25} />
             </a>
             <a
               href="https://twitter.com/_Vlad_Makarenko"
@@ -62,7 +62,7 @@ export const Footer = () => {
               className="ms-2 me-2"
               rel="noreferrer"
             >
-              <Twitter color="black" />
+              <Twitter color="black" size={25} />
             </a>
             <a
               href="https://github.com/Vlad-Makarenko"
@@ -70,7 +70,7 @@ export const Footer = () => {
               className="ms-2 me-2"
               rel="noreferrer"
             >
-              <Github color="black" />
+              <Github color="black" size={25} />
             </a>
           </Container>
         </Col>

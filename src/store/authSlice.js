@@ -160,7 +160,10 @@ const authSlice = createSlice({
     },
     [signIn.rejected]: errorHandler,
     [signUp.rejected]: errorHandler,
-    [logOut.rejected]: errorHandler,
+    [logOut.rejected]: (state) => {
+      state.me = {};
+      state.isAuthenticated = false;
+    },
     [resetPassword.rejected]: errorHandler,
     [resetPswd.rejected]: errorHandler,
     [checkAuth.rejected]: (state, action) => {
