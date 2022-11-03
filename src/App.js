@@ -43,9 +43,7 @@ const App = () => {
       <Container>
         <Row>
           <Col md={2} className="ColSideBar">
-            {/* <div className="DivSideBar"> */}
             <LeftSideBar />
-            {/* </div> */}
           </Col>
           <Col md={10} id="page-content-wrapper">
             <div className="App">{routes}</div>

@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import {
   BookmarkCheckFill,
   PeopleFill,
@@ -119,32 +119,4 @@ export const LeftSideBar = () => {
       })}
     </Nav>
   );
-
-  // return (
-  //   <Container fluid style={{ padding: '0' }}>
-  //     {sideCategories.map((category, idx) => {
-  //       if (category.to === '/saved' && !isAuthenticated) {
-  //         return <div key={category.to} />;
-  //       }
-  //       return (
-  //         <div
-  //         // eslint-disable-next-line react/no-array-index-key
-  //           key={idx}
-  //           className={
-  //           category.isActive
-  //             ? 'activeSide categoryTitle d-flex align-items-center'
-  //             : 'categoryTitle d-flex align-items-center'
-  //         }
-  //           onClick={() => navigate(category.to)}
-  //         >
-  //           {category.to === '/' ? <Stack /> : <></>}
-  //           {category.to === '/tags' ? <TagsFill /> : <></>}
-  //           {category.to === '/users' ? <PeopleFill /> : <></>}
-  //           {category.to === '/saved' ? <BookmarkCheckFill /> : <></>}
-  //           <span style={{ marginLeft: '5px' }}>{category.title}</span>
-  //         </div>
-  //       );
-  //     })}
-  //   </Container>
-  // );
 };
