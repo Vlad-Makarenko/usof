@@ -106,11 +106,11 @@ const authSlice = createSlice({
     tokenAuth(state) {
       const decodedToken = decode(localStorage.getItem('token'));
       if (decodedToken.exp * 1000 < new Date().getTime()) {
-        state.me = decodedToken;
-        state.isAuthenticated = true;
-      } else {
         state.me = {};
         state.isAuthenticated = false;
+      } else {
+        state.me = decodedToken;
+        state.isAuthenticated = true;
       }
     },
   },
